@@ -1,20 +1,27 @@
 #!/bin/bash
 
-# Auto-detect VA-API driver for hardware video acceleration
-if lspci | grep -qi "VGA.*AMD\|Radeon"; then
-	export LIBVA_DRIVER_NAME=radeonsi
-elif lspci | grep -qi "VGA.*Intel"; then
-	export LIBVA_DRIVER_NAME=iHD
+# Launch a web app using Firefox PWA (firefoxpwa)
+# Usage: launch-webapp <url> [arguments...]
+# The URL is used to look up the installed PWA by name in the desktop file.
+
+APP_URL="$1"
+shift 2>/dev/null
+
+# Find the web app by matching the URL in desktop files
+DESKTOP_DIR="$HOME/.local/share/applications"
+WEBAPP_ID=""
+
+for desktop in "$DESKTOP_DIR"/*.desktop; do
+	[[ -f "$desktop" ]] || continue
+	if grep -q "X-WebApp=true" "$desktop" 2>/dev/null && grep -q "$APP_URL" "$desktop" 2>/dev/null; then
+		WEBAPP_ID=$(grep -oP 'X-FirefoxPWA-ID=\K.*' "$desktop" 2>/dev/null)
+		break
+	fi
+done
+
+if [[ -n "$WEBAPP_ID" ]]; then
+	exec setsid uwsm-app -- firefoxpwa site launch "$WEBAPP_ID" "$@" 2>/dev/null
+else
+	# Fallback: open in regular Firefox
+	exec setsid uwsm-app -- firefox --new-window "$APP_URL" "$@" 2>/dev/null
 fi
-# NVIDIA uses nvidia-vaapi-driver if installed, no env var needed
-
-browser=$(xdg-settings get default-web-browser)
-
-case $browser in
-brave-browser* | google-chrome* | microsoft-edge* | opera* | vivaldi* | helium-browser*) ;;
-*) browser="brave-browser.desktop" ;;
-esac
-
-browser_exec=$(sed -n 's/^Exec=\([^ ]*\).*/\1/p' /usr/share/applications/$browser 2>/dev/null | head -1)
-
-exec setsid uwsm-app -- $browser_exec --app="$1" "${@:2}"

@@ -1,5 +1,6 @@
 #!/bin/bash
-# launch_webapp="$HOME/dotfiles/scripts/launch-webapp"
+# Install a web app using Firefox PWA (firefoxpwa)
+# Usage: webapp-install <name> <url> <icon_url> [custom_exec] [mime_types]
 if [ "$#" -lt 3 ]; then
   echo -e "\e[32mLet's create a new web app.\n\e[0m"
   APP_NAME=$(gum input --prompt "Name> " --placeholder "My favorite web app")
@@ -25,6 +26,7 @@ fi
 
 # Refer to local icon or fetch remotely from URL
 ICON_DIR="$HOME/.local/share/applications/icons"
+mkdir -p "$ICON_DIR"
 if [[ $ICON_REF =~ ^https?:// ]]; then
   ICON_PATH="$ICON_DIR/$APP_NAME.png"
   if curl -sL -o "$ICON_PATH" "$ICON_REF"; then
@@ -37,11 +39,37 @@ else
   ICON_PATH="$ICON_DIR/$ICON_REF"
 fi
 
-# Use custom exec if provided, otherwise default behavior
-if [[ -n $CUSTOM_EXEC ]]; then
-  EXEC_COMMAND="$CUSTOM_EXEC"
+# Install the web app via firefoxpwa
+# Use a synthetic manifest URL (most sites don't expose a PWA manifest)
+# firefoxpwa site install requires a manifest URL, so we pass the site URL
+# and override the name, start URL, and icon
+MANIFEST_URL="${APP_URL%/}/manifest.json"
+
+# Try to install via firefoxpwa, fall back to manual desktop file if no manifest
+PWA_OUTPUT=$(firefoxpwa site install "$MANIFEST_URL" \
+  --name "$APP_NAME" \
+  --start-url "$APP_URL" \
+  --icon-url "$ICON_REF" \
+  --description "$APP_NAME" \
+  2>&1)
+
+PWA_ID=$(echo "$PWA_OUTPUT" | grep -oP 'Web app installed: \K.*' || echo "")
+
+# If firefoxpwa failed (no manifest), create a desktop file that opens in Firefox
+if [[ -z "$PWA_ID" ]]; then
+  # No PWA manifest available — create a simple desktop file that opens in Firefox
+  if [[ -n $CUSTOM_EXEC ]]; then
+    EXEC_COMMAND="$CUSTOM_EXEC"
+  else
+    EXEC_COMMAND="uwsm-app -- firefox --new-window \"$APP_URL\""
+  fi
 else
-  EXEC_COMMAND="$HOME/.config/hypr/scripts/launch-webapp $APP_URL"
+  # PWA installed successfully — create desktop file that launches via firefoxpwa
+  if [[ -n $CUSTOM_EXEC ]]; then
+    EXEC_COMMAND="$CUSTOM_EXEC"
+  else
+    EXEC_COMMAND="uwsm-app -- firefoxpwa site launch $PWA_ID"
+  fi
 fi
 
 # Create application .desktop file
@@ -60,6 +88,11 @@ Categories=WebApp;
 StartupNotify=true
 X-WebApp=true
 EOF
+
+# Store PWA ID for launch-webapp to find
+if [[ -n "$PWA_ID" ]]; then
+  echo "X-FirefoxPWA-ID=$PWA_ID" >>"$DESKTOP_FILE"
+fi
 
 # Add mime types if provided
 if [[ -n $MIME_TYPES ]]; then

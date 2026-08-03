@@ -26,7 +26,6 @@ WEBAPPS=(
 	"Qobuz|https://www.qobuz.com/us-en/shop|https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/questdb.png"
 	"Excalidraw|https://excalidraw.com/|https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/excalidraw.png"
 	"Discord|https://discord.com/channels/@me|https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/discord.png"
-	"Spotify|https://open.spotify.com/|https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/spotify.png"
 	"Hotstar|https://www.hotstar.com/in/home|https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/jiohotstar.png"
 	"Google Drive|https://drive.google.com/|https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/google-drive.png"
 	"Netflix|https://www.netflix.com/|https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/netflix.png"
