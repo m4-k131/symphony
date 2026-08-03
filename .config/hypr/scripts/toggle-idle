@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Toggle screen idle/lock using KDE Plasma's screen management
 if pgrep -x hypridle >/dev/null; then
   pkill -x hypridle
   notify-send "Screen Lock" "Off - Display will stay on"

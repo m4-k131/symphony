@@ -1,0 +1,34 @@
+#!/bin/bash
+# Rofi brightness menu - shows slider-like options
+
+CACHE="$HOME/.cache/brightness"
+cur=$(cat "$CACHE" 2>/dev/null || echo 50)
+
+# Build options with visual bar
+options=""
+for i in 0 10 20 30 40 50 60 70 80 90 100; do
+    if (( i == cur )); then
+        bar=""
+        filled=$((i / 10))
+        empty=$((10 - filled))
+        for j in $(seq 1 $filled); do bar="${bar}█"; done
+        for j in $(seq 1 $empty); do bar="${bar}░"; done
+        options="${options}${bar}  ${i}%\n"
+    else
+        bar=""
+        filled=$((i / 10))
+        empty=$((10 - filled))
+        for j in $(seq 1 $filled); do bar="${bar}█"; done
+        for j in $(seq 1 $empty); do bar="${bar}░"; done
+        options="${options}${bar}  ${i}%\n"
+    fi
+done
+
+# Show rofi menu
+selected=$(echo -e "$options" | rofi -dmenu -p "" -selected-row $((cur / 10)) -theme-str 'window {width: 250px;} listview {lines: 11;} mainbox { children: [ listview ]; }' -me-select-entry '' -me-accept-entry 'MousePrimary')
+
+# Apply selection
+if [[ -n "$selected" ]]; then
+    val=$(echo "$selected" | grep -oP '\d+(?=%)')
+    [[ -n "$val" ]] && ~/.config/hypr/scripts/brightness set "$val"
+fi

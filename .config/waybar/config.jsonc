@@ -20,7 +20,8 @@
     "network",
     "bluetooth",
     "custom/solaar",
-    "backlight",
+    "custom/signal",
+    "custom/brightness",
     "pulseaudio",
     "battery",
     "clock"
@@ -176,6 +177,19 @@
     "on-click": "solaar",
     "on-click-right": "solaar --window=hide"
   },
+  "custom/signal": {
+    "format": "󰭻",
+    "tooltip-format": "Signal",
+    "on-click": "signal-desktop --password-store=kwallet6",
+    "on-click-right": "pkill -f signal-desktop"
+  },
+  "custom/brightness": {
+    "format": "󰭡",
+    "tooltip-format": "Brightness: {text}%",
+    "exec": "cat /home/malte/.cache/brightness 2>/dev/null || echo 50",
+    "interval": 1,
+    "on-click": "/home/malte/.config/rofi/scripts/brightness-menu"
+  },
   "pulseaudio": {
     "format": "{icon}",
     "on-click": "kitty --class=Wiremix -e wiremix",
@@ -192,7 +206,7 @@
     }
   },
   "tray": {
-    "icon-size": 16,
+    "icon-size": 20,
     "spacing": 4
   },
   "mpris": {

@@ -1,0 +1,8 @@
+#!/bin/bash
+# Waybar brightness module - outputs JSON with tooltip only
+
+CACHE="$HOME/.cache/brightness"
+
+v=$(cat "$CACHE" 2>/dev/null || echo 50)
+
+echo "{\"tooltip\": \"Brightness: ${v}%\"}"

@@ -1,0 +1,62 @@
+#!/bin/bash
+# Control monitor brightness via DDC/CI (cached, async)
+# Usage: brightness up|down|set <value>|get|init
+
+STEP=10
+BUS1=3   # DP-1
+BUS2=6   # DP-3
+CACHE="$HOME/.cache/brightness"
+LOCK="/tmp/brightness.lock"
+
+exec 9>"$LOCK"
+flock 9
+
+get_brightness() {
+    [[ -f "$CACHE" ]] && cat "$CACHE" || echo 50
+}
+
+set_brightness_async() {
+    local val=$1
+    echo "$val" > "$CACHE"
+    # Fire and forget - don't wait for I2C
+    ddcutil setvcp 10 "$val" --bus "$BUS1" --noverify 2>/dev/null &
+    ddcutil setvcp 10 "$val" --bus "$BUS2" --noverify 2>/dev/null &
+}
+
+init_brightness() {
+    # Read actual brightness once and cache it
+    local b1=$(ddcutil getvcp 10 --bus "$BUS1" --brief --noverify 2>/dev/null | awk '{print $4}' | tr -d ',')
+    echo "${b1:-50}" > "$CACHE"
+    cat "$CACHE"
+}
+
+case "$1" in
+    init)
+        init_brightness
+        ;;
+    up)
+        cur=$(get_brightness)
+        new=$((cur + STEP))
+        [[ $new -gt 100 ]] && new=100
+        set_brightness_async "$new"
+        echo "$new"
+        ;;
+    down)
+        cur=$(get_brightness)
+        new=$((cur - STEP))
+        [[ $new -lt 0 ]] && new=0
+        set_brightness_async "$new"
+        echo "$new"
+        ;;
+    set)
+        set_brightness_async "$2"
+        echo "$2"
+        ;;
+    get)
+        get_brightness
+        ;;
+    *)
+        echo "Usage: brightness init|up|down|set <value>|get"
+        exit 1
+        ;;
+esac
