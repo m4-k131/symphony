@@ -2,8 +2,8 @@
 # theme picker with image previews
 source "$(dirname "$0")/thumbcache"
 
-themes_dir="$HOME/dotfiles/themes"
-symphony="$HOME/dotfiles/install/themes/symphony"
+themes_dir="${DOTFILES:-$HOME/dotfiles}/themes"
+symphony="${DOTFILES:-$HOME/dotfiles}/install/themes/symphony"
 current_theme=$(cat ~/.config/symphony/.current-theme 2>/dev/null || echo "dynamic")
 
 # calculate optimal columns based on screen width

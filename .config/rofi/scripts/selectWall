@@ -50,13 +50,13 @@ for wp in "${wallpapers[@]}"; do
 		mkdir -p "$HOME/.config/symphony/current"
 		ln -sf "$wp" "$HOME/.config/symphony/current/wallpaper"
 
-		"$HOME/dotfiles/install/themes/symphony" reload
+		"${DOTFILES:-$HOME/dotfiles}/install/themes/symphony" reload
 		restart-app swayosd-server
 
-		# nautilus needs full restart to pick up new gtk theme
-		pgrep -x nautilus >/dev/null && (
-			pkill -x nautilus
-			nautilus &>/dev/null &
+		# dolphin needs full restart to pick up new gtk theme
+		pgrep -x dolphin >/dev/null && (
+			pkill -x dolphin
+			dolphin &>/dev/null &
 		)
 
 		notify-send -i "$wp" "Dynamic" "Colors from wallpaper"
