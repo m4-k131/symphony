@@ -1,27 +1,27 @@
 {
-    "wallpaper": "/home/vyrx/Wallpapers/others/a_sculpture_of_a_man_with_a_face_on_his_head.png",
+    "wallpaper": "/home/malte/Pictures/Wallpaper/arr8f7jqzbgd1.png",
     "alpha": "100",
     "special": {
-        "background": "#18130b",
-        "foreground": "#ede1d4",
-        "cursor": "#f2be6e"
+        "background": "#0f1512",
+        "foreground": "#dee4e0",
+        "cursor": "#87d6bd"
     },
     "colors": {
-        "color0": "#18130b",
+        "color0": "#0f1512",
         "color1": "#ffb4ab",
-        "color2": "#f2be6e",
-        "color3": "#b6cea3",
-        "color4": "#dcc3a1",
-        "color5": "#384c2b",
-        "color6": "#55442a",
-        "color7": "#ede1d4",
-        "color8": "#241f17",
+        "color2": "#87d6bd",
+        "color3": "#a9cbe2",
+        "color4": "#b2ccc2",
+        "color5": "#284b5e",
+        "color6": "#344c44",
+        "color7": "#dee4e0",
+        "color8": "#1b211e",
         "color9": "#ffb4ab",
-        "color10": "#f2be6e",
-        "color11": "#b6cea3",
-        "color12": "#dcc3a1",
-        "color13": "#384c2b",
-        "color14": "#55442a",
-        "color15": "#ede1d4"
+        "color10": "#87d6bd",
+        "color11": "#a9cbe2",
+        "color12": "#b2ccc2",
+        "color13": "#284b5e",
+        "color14": "#344c44",
+        "color15": "#dee4e0"
     }
 }

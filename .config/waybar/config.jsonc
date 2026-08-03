@@ -3,7 +3,7 @@
   "layer": "top",
   "position": "top",
   "spacing": 0,
-  "height": 28,
+  "height": 32,
   "modules-left": [
     "custom/logo",
     "mpris"
@@ -19,6 +19,7 @@
     "custom/idle-indicator",
     "network",
     "bluetooth",
+    "custom/solaar",
     "backlight",
     "pulseaudio",
     "battery",
@@ -163,11 +164,17 @@
     }
   },
   "bluetooth": {
-    "format": "",
+    "format": "",
     "format-disabled": "󰂲",
-    "format-connected": "",
+    "format-connected": "",
     "tooltip-format": "Devices connected: {num_connections}",
     "on-click": "systemsettings kcm_bluetooth"
+  },
+  "custom/solaar": {
+    "format": "󰒄",
+    "tooltip-format": "Logitech devices",
+    "on-click": "solaar",
+    "on-click-right": "solaar --window=hide"
   },
   "pulseaudio": {
     "format": "{icon}",
@@ -185,7 +192,7 @@
     }
   },
   "tray": {
-    "icon-size": 12,
+    "icon-size": 16,
     "spacing": 4
   },
   "mpris": {

@@ -17,7 +17,7 @@ if [[ "$CURRENT_THEME" != "dynamic" ]]; then
 fi
 
 # Directory containing wallpapers
-WALLPAPER_DIR="$HOME/Wallpapers/"
+WALLPAPER_DIR="$HOME/Pictures/Wallpaper/"
 STATE_FILE="$HOME/.current_wallpaper_index"
 
 mapfile -t WALLPAPERS < <(find "$WALLPAPER_DIR" -type f \( -iname '*.jpg' -o -iname '*.png' \) | sort)
@@ -25,7 +25,7 @@ mapfile -t WALLPAPERS < <(find "$WALLPAPER_DIR" -type f \( -iname '*.jpg' -o -in
 # Get number of wallpapers
 NUM_WALLPAPERS=${#WALLPAPERS[@]}
 if [ "$NUM_WALLPAPERS" -eq 0 ]; then
-	(action=$(notify-send -A "open=Get Wallpapers" --wait "No Wallpapers Found" "Add images to ~/Wallpapers to use dynamic theming") && [[ "$action" == "open" ]] && xdg-open "https://github.com/vyrx-dev/Wallpapers") &
+	(action=$(notify-send -A "open=Get Wallpapers" --wait "No Wallpapers Found" "Add images to ~/Pictures/Wallpaper to use dynamic theming") && [[ "$action" == "open" ]] && xdg-open "https://github.com/vyrx-dev/Wallpapers") &
 	exit 1
 fi
 

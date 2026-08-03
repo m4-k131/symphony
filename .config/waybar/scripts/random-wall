@@ -10,7 +10,7 @@ else
 fi
 
 # Random wallpaper selector with smooth animations
-WALLPAPER_DIR="$HOME/Wallpapers/"
+WALLPAPER_DIR="$HOME/Pictures/Wallpaper/"
 
 # Get wallpaper files
 mapfile -t wallpapers < <(
@@ -19,7 +19,7 @@ mapfile -t wallpapers < <(
 
 # Validate wallpapers exist
 if [[ ${#wallpapers[@]} -eq 0 ]]; then
-  (action=$(notify-send -A "open=Get Wallpapers" --wait "No Wallpapers Found" "Add images to ~/Wallpapers to use dynamic theming") && [[ "$action" == "open" ]] && xdg-open "https://github.com/vyrx-dev/Wallpapers") &
+  (action=$(notify-send -A "open=Get Wallpapers" --wait "No Wallpapers Found" "Add images to ~/Pictures/Wallpaper to use dynamic theming") && [[ "$action" == "open" ]] && xdg-open "https://github.com/vyrx-dev/Wallpapers") &
   exit 1
 fi
 
