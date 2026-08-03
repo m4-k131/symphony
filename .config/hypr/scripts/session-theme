@@ -2,9 +2,14 @@
 # Apply Hyprland-specific GTK/Qt/icon themes
 # Run from autostart.conf on Hyprland launch
 
-# GTK theme (symphony)
-gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark'
+# GTK theme
+gsettings set org.gnome.desktop.interface gtk-theme 'Breeze-Dark'
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+
+# KDE theme — ensure Dolphin and other KDE apps use Breeze Dark
+kwriteconfig6 --file ~/.config/kdeglobals --group "KDE" --key "widgetStyle" "breeze"
+kwriteconfig6 --file ~/.config/kdeglobals --group "General" --key "ColorScheme" "BreezeDark"
+kwriteconfig6 --file ~/.config/kdeglobals --group "Icons" --key "Theme" "breeze-dark"
 
 # Icon theme (symphony)
 sed -i 's/gtk-icon-theme-name=.*/gtk-icon-theme-name=char-white/' ~/.config/gtk-3.0/settings.ini 2>/dev/null
@@ -19,9 +24,9 @@ for ver in "gtk-3.0" "gtk-4.0"; do
     fi
 done
 
-# Qt style — set in systemd env so all child processes inherit
-systemctl --user set-environment QT_STYLE_OVERRIDE=kvantum
-systemctl --user set-environment QT_QPA_PLATFORMTHEME=kvantum
+# Qt style — use KDE platform theme so Qt/KDE apps use Breeze Dark from kdeglobals
+systemctl --user set-environment QT_QPA_PLATFORMTHEME=kde
+systemctl --user unset-environment QT_STYLE_OVERRIDE 2>/dev/null
 
 # Notify
 notify-send "Symphony" "Hyprland themes applied" 2>/dev/null || true
