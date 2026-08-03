@@ -1,0 +1,27 @@
+#!/bin/bash
+# Apply Hyprland-specific GTK/Qt/icon themes
+# Run from autostart.conf on Hyprland launch
+
+# GTK theme (symphony)
+gsettings set org.gnome.desktop.interface gtk-theme 'adw-gtk3-dark'
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+
+# Icon theme (symphony)
+sed -i 's/gtk-icon-theme-name=.*/gtk-icon-theme-name=char-white/' ~/.config/gtk-3.0/settings.ini 2>/dev/null
+sed -i 's/gtk-icon-theme-name=.*/gtk-icon-theme-name=char-white/' ~/.config/gtk-4.0/settings.ini 2>/dev/null
+
+# Re-symlink symphony colors.css if missing
+for ver in "gtk-3.0" "gtk-4.0"; do
+    src="$HOME/.config/symphony/current/.config/$ver/colors.css"
+    dst="$HOME/.config/$ver/colors.css"
+    if [[ -f "$src" ]] && [[ ! -L "$dst" && ! -f "$dst" ]]; then
+        ln -sf "$src" "$dst"
+    fi
+done
+
+# Qt style — set in systemd env so all child processes inherit
+systemctl --user set-environment QT_STYLE_OVERRIDE=kvantum
+systemctl --user set-environment QT_QPA_PLATFORMTHEME=kvantum
+
+# Notify
+notify-send "Symphony" "Hyprland themes applied" 2>/dev/null || true

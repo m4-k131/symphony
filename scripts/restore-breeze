@@ -1,0 +1,28 @@
+#!/bin/bash
+# Restore KDE Breeze themes on Plasma login
+# Installed as a KDE autostart desktop entry
+
+# GTK theme
+gsettings set org.gnome.desktop.interface gtk-theme 'Breeze-Dark'
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+
+# Icon theme
+sed -i 's/gtk-icon-theme-name=.*/gtk-icon-theme-name=breeze-dark/' ~/.config/gtk-3.0/settings.ini 2>/dev/null
+sed -i 's/gtk-icon-theme-name=.*/gtk-icon-theme-name=breeze-dark/' ~/.config/gtk-4.0/settings.ini 2>/dev/null
+
+# Remove symphony colors.css symlinks (KDE regenerates its own)
+rm -f ~/.config/gtk-3.0/colors.css ~/.config/gtk-4.0/colors.css 2>/dev/null
+
+# Remove symphony gtk.css imports if present
+for ver in "gtk-3.0" "gtk-4.0"; do
+    css="$HOME/.config/$ver/gtk.css"
+    if [[ -f "$css" ]] && grep -q "@import 'colors.css'" "$css" 2>/dev/null; then
+        rm -f "$css"
+    fi
+done
+
+# Qt — let KDE handle natively, no overrides
+systemctl --user unset-environment QT_STYLE_OVERRIDE QT_QPA_PLATFORMTHEME 2>/dev/null
+
+# Tell KDE to regenerate GTK config
+qdbus6 org.kde.GtkConfig /GtkConfig org.kde.GtkConfig.setGtkTheme "Breeze-Dark" 2>/dev/null || true

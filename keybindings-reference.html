@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Symphony Dotfiles — Keybindings Reference</title>
+<style>
+  @page { size: A4; margin: 15mm; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #1a1a2e;
+    background: #fff;
+  }
+  h1 {
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 4px;
+    color: #0f0f23;
+    border-bottom: 2px solid #333;
+    padding-bottom: 6px;
+  }
+  h2 {
+    font-size: 13px;
+    margin-top: 14px;
+    margin-bottom: 6px;
+    padding: 4px 8px;
+    background: #e8e8f0;
+    border-left: 3px solid #4a4a6a;
+    color: #1a1a2e;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 6px;
+  }
+  td {
+    padding: 3px 8px;
+    border-bottom: 1px solid #ddd;
+    vertical-align: top;
+  }
+  td:first-child {
+    width: 45%;
+    font-weight: 600;
+    white-space: nowrap;
+    color: #2a2a4e;
+  }
+  td:last-child {
+    color: #333;
+  }
+  tr:nth-child(even) { background: #f8f8fc; }
+  .notes {
+    margin-top: 14px;
+    padding: 8px;
+    background: #f0f0f8;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 10px;
+  }
+  .notes ul { padding-left: 18px; }
+  .notes li { margin-bottom: 2px; }
+  .two-col { display: flex; gap: 16px; }
+  .two-col > div { flex: 1; }
+  @media print {
+    .two-col { display: flex; }
+    h2 { break-after: avoid; }
+    table { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Symphony Dotfiles — Keybindings Reference</h1>
+
+<h2>Window Management</h2>
+<table>
+  <tr><td>Super + Q</td><td>Close active window</td></tr>
+  <tr><td>Super + F</td><td>Toggle fullscreen</td></tr>
+  <tr><td>Super + Shift + V</td><td>Toggle floating mode</td></tr>
+  <tr><td>Super + V</td><td>Pseudo tile (dwindle)</td></tr>
+  <tr><td>Alt + J</td><td>Toggle split direction</td></tr>
+  <tr><td>Super + Shift + O</td><td>Pop window out (float &amp; pin)</td></tr>
+  <tr><td>Super + LMB drag</td><td>Move window</td></tr>
+  <tr><td>Super + RMB drag</td><td>Resize window</td></tr>
+</table>
+
+<h2>Window Focus &amp; Movement</h2>
+<table>
+  <tr><td>Super + Arrow Keys</td><td>Move focus in direction</td></tr>
+  <tr><td>Super + H / J / K / L</td><td>Move focus (vim-style)</td></tr>
+  <tr><td>Super + Shift + Arrows</td><td>Swap window in direction</td></tr>
+  <tr><td>Alt + Tab</td><td>Cycle to next window</td></tr>
+  <tr><td>Super + Tab</td><td>Switch to previous workspace</td></tr>
+</table>
+
+<h2>Workspaces</h2>
+<table>
+  <tr><td>Super + 1-9, 0</td><td>Switch to workspace 1-10</td></tr>
+  <tr><td>Super + Shift + 1-9, 0</td><td>Move window to workspace 1-10</td></tr>
+  <tr><td>Super + Ctrl + Left/Right</td><td>Previous / next workspace</td></tr>
+  <tr><td>Super + Scroll Up/Down</td><td>Cycle workspaces</td></tr>
+  <tr><td>3-finger horizontal swipe</td><td>Switch workspace (touchpad)</td></tr>
+</table>
+
+<h2>Window Resizing</h2>
+<table>
+  <tr><td>Super + - (minus)</td><td>Expand window left</td></tr>
+  <tr><td>Super + = (equals)</td><td>Shrink window left</td></tr>
+</table>
+
+<h2>Applications</h2>
+<table>
+  <tr><td>Super + Return</td><td>Terminal (kitty)</td></tr>
+  <tr><td>Super + B</td><td>Browser</td></tr>
+  <tr><td>Super + E</td><td>File manager (dolphin)</td></tr>
+  <tr><td>Super + M</td><td>Music (spotify-launcher)</td></tr>
+  <tr><td>Super + D</td><td>Discord (vesktop)</td></tr>
+  <tr><td>Super + O</td><td>Obsidian</td></tr>
+  <tr><td>Super + /</td><td>Passwords (bitwarden-desktop)</td></tr>
+  <tr><td>Super + C</td><td>Zed editor</td></tr>
+  <tr><td>Super + Shift + D</td><td>Docker TUI (lazydocker)</td></tr>
+  <tr><td>Alt + /</td><td>Activity monitor (btop)</td></tr>
+  <tr><td>Alt + M</td><td>Music player TUI (rmpc)</td></tr>
+  <tr><td>Alt + Q</td><td>File manager TUI (yazi)</td></tr>
+  <tr><td>Alt + N</td><td>Neovim</td></tr>
+  <tr><td>Super + S</td><td>Audio mixer (wiremix)</td></tr>
+  <tr><td>Super + Alt + M</td><td>Easyeffects</td></tr>
+</table>
+
+<h2>Tmux</h2>
+<table>
+  <tr><td>Super + Shift + Return</td><td>Attach existing tmux session</td></tr>
+  <tr><td>Super + Alt + Return</td><td>Create new tmux session "main"</td></tr>
+</table>
+
+<h2>Web Apps</h2>
+<table>
+  <tr><td>Super + A</td><td>Perplexity</td></tr>
+  <tr><td>Super + Shift + A</td><td>ChatGPT</td></tr>
+  <tr><td>Super + Ctrl + A</td><td>Gemini</td></tr>
+  <tr><td>Alt + C</td><td>Google Calendar</td></tr>
+  <tr><td>Super + G</td><td>GitHub</td></tr>
+  <tr><td>Super + Shift + G</td><td>Gmail</td></tr>
+  <tr><td>Super + Y</td><td>YouTube</td></tr>
+  <tr><td>Super + W</td><td>WhatsApp</td></tr>
+  <tr><td>Super + X</td><td>X (Twitter)</td></tr>
+  <tr><td>Super + Z</td><td>LinkedIn</td></tr>
+  <tr><td>Super + T</td><td>Todoist</td></tr>
+  <tr><td>Super + \</td><td>Devhints</td></tr>
+  <tr><td>Super + Shift + I</td><td>Install new web app</td></tr>
+</table>
+
+<h2>Rofi Launchers</h2>
+<table>
+  <tr><td>Super + Space</td><td>App launcher</td></tr>
+  <tr><td>Alt + Space</td><td>File/app search</td></tr>
+  <tr><td>Alt + ,</td><td>Clipboard history</td></tr>
+  <tr><td>Alt + .</td><td>Emoji picker</td></tr>
+  <tr><td>Super + Shift + M</td><td>Rofibeats (music)</td></tr>
+  <tr><td>Super + Ctrl + B</td><td>Power profiles</td></tr>
+  <tr><td>Super + N</td><td>Notification center</td></tr>
+  <tr><td>Super + Shift + N</td><td>WiFi menu</td></tr>
+</table>
+
+<h2>Themes &amp; Wallpapers</h2>
+<table>
+  <tr><td>Super + Ctrl + Space</td><td>Matugen theme from wallpaper</td></tr>
+  <tr><td>Super + Alt + Space</td><td>Wallpaper picker</td></tr>
+  <tr><td>Ctrl + Alt + Space</td><td>Change theme</td></tr>
+  <tr><td>Super + Ctrl + Shift + Space</td><td>Theme switcher (symphony)</td></tr>
+  <tr><td>Super + Ctrl + Shift + Backspace</td><td>Random theme</td></tr>
+  <tr><td>Super + I</td><td>Symphony TUI</td></tr>
+  <tr><td>Super + Alt + I</td><td>Browse themes</td></tr>
+  <tr><td>Super + Alt + Up</td><td>Theme wallpapers</td></tr>
+  <tr><td>Super + Alt + Right</td><td>Next wallpaper</td></tr>
+  <tr><td>Super + Alt + Left</td><td>Previous wallpaper</td></tr>
+</table>
+
+<h2>Power &amp; Lock</h2>
+<table>
+  <tr><td>Super + Shift + L</td><td>Lock screen (KDE Plasma)</td></tr>
+  <tr><td>Super + Ctrl + Up</td><td>Reboot</td></tr>
+  <tr><td>Super + Escape</td><td>Power menu (rofi)</td></tr>
+  <tr><td>Power button</td><td>Power menu (rofi)</td></tr>
+  <tr><td>Super + Shift + K</td><td>Force kill application</td></tr>
+</table>
+
+<h2>Screenshots &amp; Recording</h2>
+<table>
+  <tr><td>Super + P</td><td>Screenshot with editing</td></tr>
+  <tr><td>Shift + Print</td><td>Screenshot to clipboard</td></tr>
+  <tr><td>Super + R</td><td>Record screen (desktop audio)</td></tr>
+  <tr><td>Super + Shift + R</td><td>Record screen (microphone)</td></tr>
+  <tr><td>Super + Alt + R</td><td>Record screen (mic + webcam)</td></tr>
+  <tr><td>Super + Shift + P</td><td>Color picker</td></tr>
+</table>
+
+<h2>Display &amp; Monitor</h2>
+<table>
+  <tr><td>Super + F1</td><td>Toggle monitor power</td></tr>
+  <tr><td>Super + Shift + Space</td><td>Toggle waybar</td></tr>
+  <tr><td>Super + Ctrl + N</td><td>Night light toggle</td></tr>
+  <tr><td>Super + Backspace</td><td>Terminal transparency toggle</td></tr>
+  <tr><td>Super + Ctrl + Backspace</td><td>Toggle focus &amp; vibe mode</td></tr>
+  <tr><td>Super + Alt + Vol+/-</td><td>Laptop brightness up/down</td></tr>
+  <tr><td>Super + Vol+/-</td><td>External monitor brightness</td></tr>
+</table>
+
+<h2>File Sharing (LocalSend)</h2>
+<table>
+  <tr><td>Super + Alt + S</td><td>Share file</td></tr>
+  <tr><td>Super + Ctrl + S</td><td>Share folder</td></tr>
+  <tr><td>Super + Shift + S</td><td>Share clipboard</td></tr>
+</table>
+
+<h2>Media Keys</h2>
+<table>
+  <tr><td>Volume Up / Down</td><td>Adjust volume (with OSD)</td></tr>
+  <tr><td>Mute</td><td>Toggle mute</td></tr>
+  <tr><td>Mic Mute</td><td>Toggle microphone mute</td></tr>
+  <tr><td>Brightness Up / Down</td><td>Adjust brightness (with OSD)</td></tr>
+  <tr><td>Alt + Vol+/-</td><td>Precise 1% volume adjust</td></tr>
+  <tr><td>Alt + Brightness Up/Down</td><td>Precise 1% brightness adjust</td></tr>
+  <tr><td>Play / Pause</td><td>Media play-pause (playerctl)</td></tr>
+  <tr><td>Next / Prev</td><td>Media next/previous track</td></tr>
+  <tr><td>Super + Mute</td><td>Switch audio output</td></tr>
+</table>
+
+<h2>MPD Control</h2>
+<table>
+  <tr><td>Super + F9</td><td>MPD pause</td></tr>
+  <tr><td>Super + F10</td><td>MPD previous</td></tr>
+  <tr><td>Super + F11</td><td>MPD play</td></tr>
+  <tr><td>Super + F12</td><td>MPD next</td></tr>
+</table>
+
+<h2>Help</h2>
+<table>
+  <tr><td>Super + K</td><td>Show all keybindings (rofi)</td></tr>
+</table>
+
+<div class="notes">
+  <strong>Notes:</strong>
+  <ul>
+    <li><strong>Super</strong> = Windows/Super key &nbsp;|&nbsp; <strong>LMB</strong> = Left Mouse Button &nbsp;|&nbsp; <strong>RMB</strong> = Right Mouse Button</li>
+    <li>Lock screen uses <code>loginctl lock-session</code> (KDE Plasma lock screen)</li>
+    <li>hypridle/hyprlock are disabled — KDE Plasma handles idle/lock</li>
+    <li>Web apps launch via Firefox PWA (firefoxpwa) with Firefox fallback</li>
+  </ul>
+</div>
+
+</body>
+</html>

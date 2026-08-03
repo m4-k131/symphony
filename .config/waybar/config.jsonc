@@ -15,7 +15,6 @@
   "modules-right": [
     "group/tray-drawer",
     "memory",
-    "disk",
     "custom/screenrecording-indicator",
     "custom/idle-indicator",
     "network",
@@ -88,12 +87,6 @@
     "on-click": "~/.config/waybar/scripts/wall-picker",
     "on-click-right": "~/.config/waybar/scripts/random-wall"
   },
-  "disk": {
-    "interval": 30,
-    "format": "󱛟 {percentage_free}%",
-    "tooltip-format": "Used: {used}\nFree: {free}\nTotal: {total}",
-    "path": "/"
-  },
   "cpu": {
     "interval": 2,
     "format": "󰍛 {usage}%",
@@ -110,7 +103,7 @@
     "tooltip": false
   },
   "network": {
-    "interface": "wlan*",
+    "interface": "en*",
     "format-icons": [
       "󰤯",
       "󰤟",
@@ -118,7 +111,7 @@
       "󰤥",
       "󰤨"
     ],
-    "format": "{icon} {essid}",
+    "format": "{icon}",
     "format-wifi": "{icon}",
     "format-ethernet": "󰀂",
     "format-disconnected": "󰤮",
@@ -174,7 +167,7 @@
     "format-disabled": "󰂲",
     "format-connected": "",
     "tooltip-format": "Devices connected: {num_connections}",
-    "on-click": "blueman-manager"
+    "on-click": "systemsettings kcm_bluetooth"
   },
   "pulseaudio": {
     "format": "{icon}",
