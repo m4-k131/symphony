@@ -16,6 +16,16 @@ if [[ "$CURRENT_THEME" != "dynamic" ]]; then
 	exit 0
 fi
 
+# Runtime directory for generated dynamic theme files (outside git repo)
+DYNAMIC_DIR="$HOME/.config/symphony/dynamic"
+DOTFILES="${DOTFILES:-$HOME/dotfiles}"
+
+# Set up dynamic runtime dir: copy static files from repo, then matugen generates the rest
+mkdir -p "$DYNAMIC_DIR"
+if [[ -d "$DOTFILES/themes/dynamic/static" ]]; then
+	cp -r "$DOTFILES/themes/dynamic/static/." "$DYNAMIC_DIR/"
+fi
+
 # Directory containing wallpapers
 WALLPAPER_DIR="$HOME/Pictures/Wallpaper/"
 STATE_FILE="$HOME/.current_wallpaper_index"
@@ -54,7 +64,7 @@ CURRENT_WALLPAPER="${WALLPAPERS[$INDEX]}"
 # Update wallpaper symlink to track current wallpaper
 DISPLAYED_WALLPAPER=$("$wallbin" query | grep "currently displaying" | head -1 | sed 's/.*image: //')
 if [ -n "$DISPLAYED_WALLPAPER" ]; then
-	ln -sf "$DISPLAYED_WALLPAPER" "$HOME/dotfiles/themes/dynamic/wallpaper"
+	ln -sf "$DISPLAYED_WALLPAPER" "$DYNAMIC_DIR/wallpaper"
 fi
 
 matugen image "$CURRENT_WALLPAPER" -m dark --source-color-index 0

@@ -36,7 +36,8 @@ menu() {
 	for dir in "$themes_dir"/*/; do
 		name=$(basename "$dir")
 		[[ "$name" == "Wallpapers" || "$name" == ".git" ]] && continue
-		[[ ! -d "$dir/.config" ]] && continue
+		# Dynamic theme's .config is generated at runtime, not in the repo
+		[[ "$name" != "dynamic" && ! -d "$dir/.config" ]] && continue
 
 		preview=$(get_preview "$dir")
 		[[ -z "$preview" ]] && continue

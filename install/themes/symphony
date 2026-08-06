@@ -44,6 +44,15 @@ theme_exists() {
 	[[ -d "$THEMES_DIR/$1" ]]
 }
 
+# Dynamic theme uses a runtime dir outside the git repo for generated files
+target_dir() {
+	if [[ "$1" == "dynamic" ]]; then
+		echo "$SYMPHONY_DIR/dynamic"
+	else
+		echo "$THEMES_DIR/$1"
+	fi
+}
+
 list_themes() {
 	echo "dynamic"
 	for dir in "$THEMES_DIR"/*/; do
@@ -149,7 +158,7 @@ cmd_switch() {
 
 	mkdir -p "$SYMPHONY_DIR"
 	echo "$theme" > "$THEME_FILE"
-	ln -sfn "$THEMES_DIR/$theme" "$CURRENT_LINK"
+	ln -sfn "$(target_dir "$theme")" "$CURRENT_LINK"
 
 	# Dynamic theme runs hooks via change-theme -> symphony reload
 	if [[ "$theme" != "dynamic" ]]; then
@@ -172,7 +181,7 @@ cmd_reload() {
 	info "Reloading $theme..."
 
 	mkdir -p "$SYMPHONY_DIR"
-	ln -sfn "$THEMES_DIR/$theme" "$CURRENT_LINK"
+	ln -sfn "$(target_dir "$theme")" "$CURRENT_LINK"
 
 	hyprctl keyword misc:disable_autoreload 1 &>/dev/null || true
 	run_hooks
@@ -223,7 +232,7 @@ cmd_fix() {
 	theme_exists "$theme" || { err "Theme '$theme' not found"; exit 1; }
 
 	mkdir -p "$SYMPHONY_DIR"
-	ln -sfn "$THEMES_DIR/$theme" "$CURRENT_LINK"
+	ln -sfn "$(target_dir "$theme")" "$CURRENT_LINK"
 	run_hooks
 	ok "Fixed $theme"
 }

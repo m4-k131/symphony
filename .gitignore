@@ -12,8 +12,9 @@
 .config/gtk-3.0/bookmarks
 .config/gtk-4.0/bookmarks
 
-# Dynamic theme generated files
-themes/dynamic/.config/spicetify/Themes/symphony/color.ini
+# Dynamic theme generated files (now live in ~/.config/symphony/dynamic/ at runtime)
+themes/dynamic/.config/
+themes/dynamic/.cache/
 
 # Theme wallpaper symlinks (user preference, changes frequently)
 themes/*/wallpaper
