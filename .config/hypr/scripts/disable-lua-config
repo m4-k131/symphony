@@ -1,0 +1,22 @@
+#!/bin/bash
+# Recovery script: disable Hyprland Lua config and fall back to hyprland.conf
+# Usage: ~/disable-lua-config.sh
+
+HYPDIR="$HOME/.config/hypr"
+REMOVED=0
+
+# Remove all .lua symlinks (entry point + modules)
+for f in "$HYPDIR"/*.lua; do
+    if [ -L "$f" ]; then
+        rm -f "$f"
+        echo "Removed $f"
+        REMOVED=1
+    fi
+done
+
+if [ "$REMOVED" = "1" ]; then
+    echo "Lua config disabled — Hyprland will use hyprland.conf on next restart"
+    echo "Restart Hyprland to apply: hyprctl dispatch exit"
+else
+    echo "No .lua symlinks found — Lua config is already disabled"
+fi
