@@ -16,6 +16,8 @@ return {
           "gopls",
           "lua-language-server",
           "pyright",
+          "ruff",
+          "debugpy",
           "typescript-language-server",
           "json-lsp",
           "yaml-language-server",
@@ -31,7 +33,6 @@ return {
 
           -- Linters
           "eslint_d",
-          "flake8",
           "luacheck",
           "hadolint",
           "shellcheck",
