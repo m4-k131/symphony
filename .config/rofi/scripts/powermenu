@@ -17,10 +17,6 @@ case "$choice" in
 	systemctl suspend
 	;;
 "Logout")
-	if pgrep -x uwsm >/dev/null; then
-		uwsm stop
-	else
-		hyprctl dispatch exit
-	fi
+	"$scrDir/graceful-logout"
 	;;
 esac

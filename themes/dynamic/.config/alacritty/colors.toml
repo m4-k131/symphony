@@ -2,67 +2,67 @@
 # https://github.com/vyrx-dev/dotfiles
 
 [colors.primary]
-background = '#0f1512'
-foreground = '#dee4e0'
+background = '#101510'
+foreground = '#dfe4dc'
 
 [colors.cursor]
-cursor = '#87d6bd'
-text = '#00382c'
+cursor = '#96d5a7'
+text = '#00391c'
 
 [colors.vi_mode_cursor]
-cursor = '#87d6bd'
-text = '#00382c'
+cursor = '#96d5a7'
+text = '#00391c'
 
 [colors.search.matches]
-foreground = '#0e3446'
-background = '#a9cbe2'
+foreground = '#023640'
+background = '#a2ceda'
 
 [colors.search.focused_match]
-foreground = '#00382c'
-background = '#87d6bd'
+foreground = '#00391c'
+background = '#96d5a7'
 
 [colors.footer_bar]
-foreground = '#dee4e0'
-background = '#1b211e'
+foreground = '#dfe4dc'
+background = '#1c211c'
 
 [colors.hints.start]
-foreground = '#1d352e'
-background = '#b2ccc2'
+foreground = '#223527'
+background = '#b6ccb9'
 
 [colors.hints.end]
-foreground = '#1d352e'
-background = '#344c44'
+foreground = '#223527'
+background = '#384b3c'
 
 [colors.selection]
-text = '#00382c'
-background = '#87d6bd'
+text = '#00391c'
+background = '#96d5a7'
 
 [colors.normal]
-black   = '#0f1512'
+black   = '#101510'
 red     = '#ffb4ab'
-green   = '#a9cbe2'
-yellow  = '#b2ccc2'
-blue    = '#87d6bd'
-magenta = '#a9cbe2'
-cyan    = '#b2ccc2'
-white   = '#bfc9c4'
+green   = '#a2ceda'
+yellow  = '#b6ccb9'
+blue    = '#96d5a7'
+magenta = '#a2ceda'
+cyan    = '#b6ccb9'
+white   = '#c0c9bf'
 
 [colors.bright]
-black   = '#343b38'
+black   = '#353a35'
 red     = '#93000a'
-green   = '#284b5e'
-yellow  = '#344c44'
-blue    = '#005141'
-magenta = '#c5e7ff'
-cyan    = '#cde9de'
-white   = '#dee4e0'
+green   = '#214c57'
+yellow  = '#384b3c'
+blue    = '#11512e'
+magenta = '#beeaf6'
+cyan    = '#d2e8d4'
+white   = '#dfe4dc'
 
 [colors.dim]
-black   = '#090f0d'
+black   = '#0a0f0b'
 red     = '#ffdad6'
-green   = '#c5e7ff'
-yellow  = '#cde9de'
-blue    = '#a2f2d9'
-magenta = '#001e2d'
-cyan    = '#072019'
-white   = '#89938e'
+green   = '#beeaf6'
+yellow  = '#d2e8d4'
+blue    = '#b1f1c1'
+magenta = '#001f26'
+cyan    = '#0d1f13'
+white   = '#8b938a'

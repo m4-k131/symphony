@@ -1,0 +1,10 @@
+#!/bin/bash
+# Graceful logout: restart plasmalogin (fresh DRM master), then end session.
+# This avoids the NVIDIA DRM master handoff bug where the greeter can't
+# re-acquire the DRM device after the session compositor releases it.
+
+# Restart plasmalogin first (kills old process, starts fresh with new DRM master)
+sudo systemctl restart plasmalogin.service &
+
+# Now terminate the session — Hyprland exits, plasmalogin greeter takes over
+loginctl terminate-session "$XDG_SESSION_ID"

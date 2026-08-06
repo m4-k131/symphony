@@ -17,7 +17,8 @@
     "memory",
     "custom/screenrecording-indicator",
     "custom/idle-indicator",
-    "network",
+    "network#wifi",
+    "network#eth",
     "bluetooth",
     "custom/solaar",
     "custom/signal",
@@ -104,8 +105,8 @@
     "format-alt": "{:L%A %d %B}",
     "tooltip": false
   },
-  "network": {
-    "interface": "en*",
+  "network#wifi": {
+    "interface": "wlan*",
     "format-icons": [
       "󰤯",
       "󰤟",
@@ -115,11 +116,19 @@
     ],
     "format": "{icon}",
     "format-wifi": "{icon}",
-    "format-ethernet": "󰀂",
     "format-disconnected": "󰤮",
     "tooltip-format-wifi": "{essid} ({frequency} GHz)\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
-    "tooltip-format-ethernet": "⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
     "tooltip-format-disconnected": "Disconnected",
+    "interval": 3,
+    "on-click": "~/.config/rofi/scripts/wifi.sh"
+  },
+  "network#eth": {
+    "interface": "en*",
+    "format": "󰀂",
+    "format-ethernet": "󰀂",
+    "format-disconnected": "󰀅",
+    "tooltip-format-ethernet": "Wired ({ifname})\n⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
+    "tooltip-format-disconnected": "Wired: Disconnected",
     "interval": 3,
     "on-click": "nmgui"
   },

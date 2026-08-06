@@ -1,27 +1,27 @@
 {
-    "wallpaper": "/home/malte/Pictures/Wallpaper/arr8f7jqzbgd1.png",
+    "wallpaper": "/home/malte/Pictures/Wallpaper/uftkich9hb911.jpg",
     "alpha": "100",
     "special": {
-        "background": "#0f1512",
-        "foreground": "#dee4e0",
-        "cursor": "#87d6bd"
+        "background": "#101510",
+        "foreground": "#dfe4dc",
+        "cursor": "#96d5a7"
     },
     "colors": {
-        "color0": "#0f1512",
+        "color0": "#101510",
         "color1": "#ffb4ab",
-        "color2": "#87d6bd",
-        "color3": "#a9cbe2",
-        "color4": "#b2ccc2",
-        "color5": "#284b5e",
-        "color6": "#344c44",
-        "color7": "#dee4e0",
-        "color8": "#1b211e",
+        "color2": "#96d5a7",
+        "color3": "#a2ceda",
+        "color4": "#b6ccb9",
+        "color5": "#214c57",
+        "color6": "#384b3c",
+        "color7": "#dfe4dc",
+        "color8": "#1c211c",
         "color9": "#ffb4ab",
-        "color10": "#87d6bd",
-        "color11": "#a9cbe2",
-        "color12": "#b2ccc2",
-        "color13": "#284b5e",
-        "color14": "#344c44",
-        "color15": "#dee4e0"
+        "color10": "#96d5a7",
+        "color11": "#a2ceda",
+        "color12": "#b6ccb9",
+        "color13": "#214c57",
+        "color14": "#384b3c",
+        "color15": "#dfe4dc"
     }
 }
