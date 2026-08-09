@@ -9,6 +9,9 @@ configuration {
     sidebar-mode: false;
     terminal: "kitty";
     font: "CaskaydiaCove Nerd Font Mono 11";
+    me-select-entry: "";
+    me-accept-entry: "MousePrimary";
+    hover-select: true;
 }
 
 * {

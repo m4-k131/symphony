@@ -1,0 +1,48 @@
+#!/bin/bash
+# Monitor configuration switcher
+# Usage:
+#   monitor-switch           — rofi menu
+#   monitor-switch both      — both monitors
+#   monitor-switch only1     — only DP-1 (right)
+#   monitor-switch only2     — only DP-3 (left)
+
+MON1="desc:Beihai Century Joint Innovation Technology Co.Ltd UWQHD-144-V2"
+MON2="desc:Beihai Century Joint Innovation Technology Co.Ltd UWQHD-100-C"
+
+set_both() {
+	hyprctl monitor "$MON2,3440x1440@99.998,4629x552,1"
+	hyprctl monitor "$MON1,3440x1440@100,8069x552,1"
+	notify-send "Monitors" "Both monitors enabled"
+}
+
+set_only1() {
+	hyprctl monitor "$MON1,3440x1440@100,0x0,1"
+	hyprctl monitor "$MON2,disable"
+	notify-send "Monitors" "Only DP-1 enabled"
+}
+
+set_only2() {
+	hyprctl monitor "$MON2,3440x1440@99.998,0x0,1"
+	hyprctl monitor "$MON1,disable"
+	notify-send "Monitors" "Only DP-3 enabled"
+}
+
+# Direct mode (no rofi)
+if [ -n "$1" ]; then
+	case "$1" in
+		both)  set_both  ;;
+		only1) set_only1 ;;
+		only2) set_only2 ;;
+	esac
+	exit 0
+fi
+
+# Rofi menu mode
+options="Both Monitors\nOnly Monitor 1 (DP-1)\nOnly Monitor 2 (DP-3)"
+choice=$(echo -e "$options" | rofi -dmenu -p "Monitor" -config "$HOME/.config/rofi/custom-rofi/config-monitor-switch.rasi")
+
+case "$choice" in
+"Both Monitors")            set_both  ;;
+"Only Monitor 1 (DP-1)")    set_only1 ;;
+"Only Monitor 2 (DP-3)")    set_only2 ;;
+esac

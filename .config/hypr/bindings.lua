@@ -55,6 +55,13 @@ hl.bind("ALT + SPACE", hl.dsp.exec_cmd(rofiDir .. "/rofisearch"), { description 
 hl.bind("SUPER + SPACE", hl.dsp.exec_cmd("pkill rofi || rofi -show drun"), { description = "app-launcher" })
 hl.bind("SUPER + CTRL + B", hl.dsp.exec_cmd(rofiDir .. "/power-profiles"), { description = "Power Profiles" })
 
+-- Monitor configuration
+hl.bind("SUPER + SHIFT + P", hl.dsp.exec_cmd(rofiDir .. "/monitor-switch"), { description = "Monitor Switch Menu" })
+hl.bind("SUPER + SHIFT + F1", hl.dsp.exec_cmd(rofiDir .. "/monitor-switch both"), { description = "Both monitors" })
+hl.bind("SUPER + SHIFT + F2", hl.dsp.exec_cmd(rofiDir .. "/monitor-switch only1"), { description = "Only monitor 1" })
+hl.bind("SUPER + SHIFT + F3", hl.dsp.exec_cmd(rofiDir .. "/monitor-switch only2"), { description = "Only monitor 2" })
+hl.bind("SUPER + CTRL + M", hl.dsp.exec_cmd(scrDir .. "/move-all-to-other-monitor"), { description = "Move all windows to other monitor" })
+
 hl.bind("SUPER + SHIFT + O", hl.dsp.exec_cmd(scrDir .. "/pop-window"), { description = "Pop window out (float & pin)" })
 hl.bind("SUPER + SHIFT + SPACE", hl.dsp.exec_cmd(scrDir .. "/toggle-waybar"))
 hl.bind("SUPER + CTRL + N", hl.dsp.exec_cmd(scrDir .. "/nightlight"))
@@ -72,11 +79,6 @@ hl.bind("SUPER + CTRL + SHIFT + SPACE", hl.dsp.exec_cmd("symphony switch"), { de
 hl.bind("SUPER + CTRL + SHIFT + BACKSPACE", hl.dsp.exec_cmd("symphony switch --random"), { description = "Theme Switcher" })
 hl.bind("SUPER + I", hl.dsp.exec_cmd('kitty --title symphony-tui -e symphony-tui'), { description = "Symphony TUI" })
 hl.bind("SUPER + ALT + I", hl.dsp.exec_cmd('kitty --title symphony-browse -e symphony browse'), { description = "Browse Themes" })
-
--- Current Theme Wallpaper Cycling
-hl.bind("SUPER + ALT + up",   hl.dsp.exec_cmd(scrDir .. "/cycle-wallpaper"),      { description = "Theme Wallpapers" })
-hl.bind("SUPER + ALT + right", hl.dsp.exec_cmd(scrDir .. "/cycle-wallpaper next"), { description = "Next Wallpaper" })
-hl.bind("SUPER + ALT + left",  hl.dsp.exec_cmd(scrDir .. "/cycle-wallpaper prev"), { description = "Previous Wallpaper" })
 
 -- Power
 hl.bind("SUPER + SHIFT + L", hl.dsp.exec_cmd(scrDir .. "/lock-screen"), { description = "lock screen" })

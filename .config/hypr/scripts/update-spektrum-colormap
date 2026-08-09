@@ -1,0 +1,204 @@
+#!/bin/bash
+# Extract 5 colors from the current theme and push them as a colormap
+# to vividspektrum via IPC.
+#
+# For dynamic themes (matugen): uses Material Design 3 color tokens
+# For static themes: uses GTK colors.css (@define-color entries)
+#
+# Color selection (dark → bright gradient for spectrogram magnitude):
+#   0.00 — deepest background color (silence)
+#   0.25 — dark accent / container color
+#   0.50 — main accent color (mid-brightness)
+#   0.75 — lighter complementary accent
+#   1.00 — brightest foreground color (peaks)
+
+SOCKET="/tmp/vividspektrum.sock"
+
+# Determine current theme and find colors file
+CURRENT_THEME=$(cat ~/.config/symphony/.current-theme 2>/dev/null || echo "dynamic")
+COLORS_LUA=""
+COLORS_CSS=""
+
+if [ "$CURRENT_THEME" = "dynamic" ]; then
+    COLORS_LUA="$HOME/.config/symphony/dynamic/.config/hypr/theme/colors.lua"
+else
+    THEME_DIR="${DOTFILES:-$HOME/dotfiles}/themes/$CURRENT_THEME"
+    COLORS_CSS="$THEME_DIR/.config/waybar/colors.css"
+    COLORS_CONF="$THEME_DIR/.config/hypr/theme/colors.conf"
+fi
+
+if [ ! -f "$COLORS_LUA" ] && [ ! -f "$COLORS_CSS" ]; then
+    exit 0
+fi
+
+# ── Color extractors ──────────────────────────────────────────────
+
+# From colors.lua: M.name = "rgba(RRGGBBff)"
+get_color_lua() {
+    grep "M\.$1 " "$COLORS_LUA" 2>/dev/null | sed 's/.*rgba(\([0-9a-fA-F]*\)ff).*/\1/' | head -1
+}
+
+# From colors.css: @define-color name #RRGGBB; or @define-color name rgba(R,G,B,A);
+get_color_css() {
+    local name="$1"
+    local hex
+    # Try #RRGGBB format first
+    hex=$(grep -i "@define-color $name " "$COLORS_CSS" 2>/dev/null | sed 's/.*#\([0-9a-fA-F]*\).*/\1/' | head -1)
+    if [ -n "$hex" ] && [ ${#hex} -eq 6 ]; then
+        echo "$hex"
+        return
+    fi
+    # Try rgba(R, G, B, A) format — convert decimal to hex
+    local rgba
+    rgba=$(grep -i "@define-color $name " "$COLORS_CSS" 2>/dev/null | sed 's/.*rgba(\([^)]*\)).*/\1/' | head -1)
+    if [ -n "$rgba" ]; then
+        local r g b
+        r=$(echo "$rgba" | cut -d',' -f1 | tr -d ' ')
+        g=$(echo "$rgba" | cut -d',' -f2 | tr -d ' ')
+        b=$(echo "$rgba" | cut -d',' -f3 | tr -d ' ')
+        printf "%02x%02x%02x" "$r" "$g" "$b" 2>/dev/null
+        return
+    fi
+}
+
+# From colors.conf: $name = rgba(RRGGBBaa)
+get_color_conf() {
+    grep -i "\\\$$1 " "$COLORS_CONF" 2>/dev/null | sed 's/.*rgba(\([0-9a-fA-F]*\).*/\1/' | head -1
+}
+
+# Unified getter
+get_color() {
+    local hex
+    if [ -f "$COLORS_LUA" ]; then
+        hex=$(get_color_lua "$1")
+    fi
+    if [ -z "$hex" ] && [ -f "$COLORS_CSS" ]; then
+        hex=$(get_color_css "$1")
+    fi
+    if [ -z "$hex" ] && [ -f "$COLORS_CONF" ]; then
+        hex=$(get_color_conf "$1")
+    fi
+    echo "$hex"
+}
+
+# ── Convert hex to colormap stop ──────────────────────────────────
+hex_to_stop() {
+    local hex="$1" pos="$2"
+    local r=$((16#${hex:0:2})) g=$((16#${hex:2:2})) b=$((16#${hex:4:2}))
+    awk "BEGIN { printf \"%s,%.3f,%.3f,%.3f\", \"$pos\", $r/255, $g/255, $b/255 }"
+}
+
+# ── Pick 5 colors for the gradient ────────────────────────────────
+# Dynamic (matugen) uses Material Design 3 tokens
+# Static themes use GTK color names + fallbacks
+
+C0_HEX=$(get_color "surface_container_lowest")
+[ -z "$C0_HEX" ] && C0_HEX=$(get_color "background")
+[ -z "$C0_HEX" ] && C0_HEX=$(get_color "window_bg_color")
+[ -z "$C0_HEX" ] && C0_HEX=$(get_color "black")
+
+C1_HEX=$(get_color "primary_container")
+[ -z "$C1_HEX" ] && C1_HEX=$(get_color "surface_container_high")
+[ -z "$C1_HEX" ] && C1_HEX=$(get_color "surface_container")
+[ -z "$C1_HEX" ] && C1_HEX=$(get_color "bright_black")
+[ -z "$C1_HEX" ] && C1_HEX=$(get_color "view_bg_color")
+
+C2_HEX=$(get_color "primary")
+[ -z "$C2_HEX" ] && C2_HEX=$(get_color "secondary")
+[ -z "$C2_HEX" ] && C2_HEX=$(get_color "accent_color")
+[ -z "$C2_HEX" ] && C2_HEX=$(get_color "accent_bg_color")
+[ -z "$C2_HEX" ] && C2_HEX=$(get_color "red")
+
+C3_HEX=$(get_color "tertiary")
+[ -z "$C3_HEX" ] && C3_HEX=$(get_color "secondary_fixed")
+[ -z "$C3_HEX" ] && C3_HEX=$(get_color "primary_fixed")
+[ -z "$C3_HEX" ] && C3_HEX=$(get_color "yellow")
+[ -z "$C3_HEX" ] && C3_HEX=$(get_color "magenta")
+
+C4_HEX=$(get_color "on_surface")
+[ -z "$C4_HEX" ] && C4_HEX=$(get_color "on_primary")
+[ -z "$C4_HEX" ] && C4_HEX=$(get_color "primary_fixed")
+[ -z "$C4_HEX" ] && C4_HEX=$(get_color "foreground")
+[ -z "$C4_HEX" ] && C4_HEX=$(get_color "window_fg_color")
+[ -z "$C4_HEX" ] && C4_HEX=$(get_color "bright_white")
+[ -z "$C4_HEX" ] && C4_HEX=$(get_color "white")
+
+# Bail if we don't have the essential colors
+if [ -z "$C0_HEX" ] || [ -z "$C2_HEX" ] || [ -z "$C4_HEX" ]; then
+    exit 0
+fi
+
+# Fill gaps
+[ -z "$C1_HEX" ] && C1_HEX="$C0_HEX"
+[ -z "$C3_HEX" ] && C3_HEX="$C4_HEX"
+
+# ── Build and send stops ──────────────────────────────────────────
+STOP0=$(hex_to_stop "$C0_HEX" "0.0")
+STOP1=$(hex_to_stop "$C1_HEX" "0.25")
+STOP2=$(hex_to_stop "$C2_HEX" "0.5")
+STOP3=$(hex_to_stop "$C3_HEX" "0.75")
+STOP4=$(hex_to_stop "$C4_HEX" "1.0")
+
+STOPS="$STOP0 $STOP1 $STOP2 $STOP3 $STOP4"
+
+COLORMAP_DIR="$HOME/.config/vividspektrum/colormaps"
+COLORMAP_FILE="$COLORMAP_DIR/matugen.toml"
+
+# Write the colormap TOML file directly (persists for next vividspektrum launch)
+write_toml() {
+    mkdir -p "$COLORMAP_DIR"
+    cat > "$COLORMAP_FILE" <<EOF
+name = "matugen"
+
+[[stops]]
+position = 0.0
+r = $(awk "BEGIN{printf \"%.3f\", $((16#${C0_HEX:0:2}))/255}")
+g = $(awk "BEGIN{printf \"%.3f\", $((16#${C0_HEX:2:2}))/255}")
+b = $(awk "BEGIN{printf \"%.3f\", $((16#${C0_HEX:4:2}))/255}")
+
+[[stops]]
+position = 0.25
+r = $(awk "BEGIN{printf \"%.3f\", $((16#${C1_HEX:0:2}))/255}")
+g = $(awk "BEGIN{printf \"%.3f\", $((16#${C1_HEX:2:2}))/255}")
+b = $(awk "BEGIN{printf \"%.3f\", $((16#${C1_HEX:4:2}))/255}")
+
+[[stops]]
+position = 0.5
+r = $(awk "BEGIN{printf \"%.3f\", $((16#${C2_HEX:0:2}))/255}")
+g = $(awk "BEGIN{printf \"%.3f\", $((16#${C2_HEX:2:2}))/255}")
+b = $(awk "BEGIN{printf \"%.3f\", $((16#${C2_HEX:4:2}))/255}")
+
+[[stops]]
+position = 0.75
+r = $(awk "BEGIN{printf \"%.3f\", $((16#${C3_HEX:0:2}))/255}")
+g = $(awk "BEGIN{printf \"%.3f\", $((16#${C3_HEX:2:2}))/255}")
+b = $(awk "BEGIN{printf \"%.3f\", $((16#${C3_HEX:4:2}))/255}")
+
+[[stops]]
+position = 1.0
+r = $(awk "BEGIN{printf \"%.3f\", $((16#${C4_HEX:0:2}))/255}")
+g = $(awk "BEGIN{printf \"%.3f\", $((16#${C4_HEX:2:2}))/255}")
+b = $(awk "BEGIN{printf \"%.3f\", $((16#${C4_HEX:4:2}))/255}")
+EOF
+}
+
+# Always write the TOML file so it persists
+write_toml
+
+# If vividspektrum is running, also apply + save via IPC
+if [ -S "$SOCKET" ]; then
+    if command -v socat >/dev/null 2>&1; then
+        echo "colormap-save matugen $STOPS" | socat - "$SOCKET" 2>/dev/null
+    elif command -v nc >/dev/null 2>&1; then
+        echo "colormap-save matugen $STOPS" | nc -U -q0 "$SOCKET" 2>/dev/null
+    else
+        python3 -c "
+import socket
+s = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+s.connect('$SOCKET')
+s.sendall(('colormap-save matugen $STOPS\n').encode())
+s.recv(4096)
+s.close()
+" 2>/dev/null
+    fi
+fi

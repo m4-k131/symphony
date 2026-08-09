@@ -73,7 +73,33 @@
       "8": "8",
       "9": "9",
       "10": "10",
-      "default": ""
+      "default": ""
+    },
+    "format-window-separator": "\n",
+    "window-rewrite-default": "",
+    "window-rewrite": {
+      "class<firefox>": "󰈹 Firefox",
+      "class<kitty>": "󰆍 Kitty",
+      "class<devin-desktop>": "󰚯 Devin",
+      "class<steam>": "󰓓 Steam",
+      "class<code>": "󰨞 VSCode",
+      "class<discord>": "󰙯 Discord",
+      "class<Signal>": "󰭻 Signal",
+      "class<spotify>": "󰓇 Spotify",
+      "class<nautilus>": "󰝰 Files",
+      "class<dolphin>": "󰝰 Dolphin",
+      "class<thunar>": "󰝰 Files",
+      "class<obsidian>": "󰂻 Obsidian",
+      "class<zoom>": "󰕧 Zoom",
+      "class<slack>": "󰒋 Slack",
+      "class<teams>": "󰊻 Teams",
+      "title<.*YouTube.*>": "󰗃 YouTube",
+      "title<.*GitHub.*>": "󰊤 GitHub",
+      "title<.*Gmail.*>": "󰊫 Gmail"
+    },
+    "tooltips": {
+      "default": "{windows}",
+      "empty": ""
     }
   },
   "backlight": {

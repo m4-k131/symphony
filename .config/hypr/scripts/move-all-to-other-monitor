@@ -1,0 +1,31 @@
+#!/bin/bash
+# Move the current workspace (with all windows) to the other monitor.
+# Layout is preserved since the workspace itself is moved.
+
+current_ws=$(hyprctl activeworkspace -j | jq -r '.id')
+current_mon=$(hyprctl activeworkspace -j | jq -r '.monitor')
+
+# Find the other monitor
+other_mon=$(hyprctl monitors -j | jq -r ".[] | select(.name != \"$current_mon\") | .name" | head -1)
+
+if [ -z "$other_mon" ]; then
+    notify-send -t 2000 "No other monitor found"
+    exit 1
+fi
+
+# Move the entire workspace to the other monitor
+hyprctl dispatch "hl.dsp.workspace.move({workspace=$current_ws, monitor='$other_mon'})" >/dev/null 2>&1
+
+# Focus the workspace on the other monitor
+hyprctl dispatch "hl.dsp.focus({monitor='$other_mon'})" >/dev/null 2>&1
+hyprctl dispatch "hl.dsp.focus({workspace=$current_ws})" >/dev/null 2>&1
+
+# Focus a fresh empty workspace on the old monitor
+new_ws=$(hyprctl workspaces -j | jq '[.[].id] | max // 0')
+new_ws=$((new_ws + 1))
+hyprctl dispatch "hl.dsp.focus({monitor='$current_mon'})" >/dev/null 2>&1
+hyprctl dispatch "hl.dsp.focus({workspace=$new_ws})" >/dev/null 2>&1
+
+# Focus back to the moved workspace on the other monitor
+hyprctl dispatch "hl.dsp.focus({monitor='$other_mon'})" >/dev/null 2>&1
+hyprctl dispatch "hl.dsp.focus({workspace=$current_ws})" >/dev/null 2>&1

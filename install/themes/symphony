@@ -171,6 +171,8 @@ cmd_switch() {
 	# Dynamic theme handles its own notification via change-theme script
 	if [[ "$theme" != "dynamic" ]]; then
 		notify "$theme" "" "$(readlink -f "$THEMES_DIR/$theme/wallpaper" 2>/dev/null)"
+		# Push fitting colormap to vividspektrum if it's running
+		"$HOME/.config/hypr/scripts/update-spektrum-colormap" &>/dev/null &
 	fi
 	ok "Switched to $theme"
 }

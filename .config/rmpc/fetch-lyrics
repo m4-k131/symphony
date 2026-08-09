@@ -24,7 +24,7 @@ else
 fi
 
 # Send notification
-notify-send -i "$ICON" "Now Playing" "$ARTIST - $TITLE"
+# notify-send -i "$ICON" "Now Playing" "$ARTIST - $TITLE"
 
 # ───────────────────────────────────────────────────────────
 # Auto-fetch Lyrics

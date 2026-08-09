@@ -69,6 +69,9 @@ fi
 
 matugen image "$CURRENT_WALLPAPER" -m dark --source-color-index 0
 
+# Push fitting colormap to vividspektrum if it's running
+scrDir/update-spektrum-colormap &
+
 # Update Symphony apps that need special handling
 "$HOME/dotfiles/install/themes/symphony" reload
 
