@@ -1,0 +1,50 @@
+#!/bin/bash
+# Quick picker for matugen color scheme type
+# Changes the scheme and regenerates colors from current wallpaper
+
+CONF_FILE="$HOME/.config/symphony/matugen.conf"
+CURRENT=$(grep '^SCHEME_TYPE=' "$CONF_FILE" 2>/dev/null | cut -d= -f2 || echo "scheme-content")
+
+schemes=(
+    "scheme-content:Stays closest to wallpaper's actual hues"
+    "scheme-fidelity:Like content but more contrast in accents"
+    "scheme-vibrant:More saturated, punchy colors"
+    "scheme-tonal-spot:Default M3, rotates secondary/tertiary (blue bias)"
+    "scheme-expressive:More varied, artistic hues"
+    "scheme-rainbow:Full hue rotation across spectrum"
+    "scheme-fruit-salad:Playful, warm-leaning hues"
+    "scheme-monochrome:Single hue, varied tones"
+    "scheme-neutral:Muted, near-gray accents"
+)
+
+menu() {
+    for s in "${schemes[@]}"; do
+        name="${s%%:*}"
+        desc="${s##*:}"
+        marker=""
+        [[ "$name" == "$CURRENT" ]] && marker="● "
+        printf "%s%s — %s\n" "$marker" "$name" "$desc"
+    done
+}
+
+choice=$(menu | rofi -i -dmenu -p "Scheme" -no-custom 2>/dev/null)
+[[ -z "$choice" ]] && exit 0
+
+# Extract scheme name (strip marker and description)
+scheme=$(echo "$choice" | sed 's/^● //; s/ — .*//')
+
+# Update config
+if grep -q '^SCHEME_TYPE=' "$CONF_FILE" 2>/dev/null; then
+    sed -i "s/^SCHEME_TYPE=.*/SCHEME_TYPE=$scheme/" "$CONF_FILE"
+else
+    echo "SCHEME_TYPE=$scheme" >> "$CONF_FILE"
+fi
+
+# Regenerate colors from current wallpaper
+WALLPAPER=$(grep 'M\.image' "$HOME/.config/symphony/dynamic/.config/hypr/theme/colors.lua" 2>/dev/null | sed 's/.*= "\(.*\)"/\1/')
+if [ -n "$WALLPAPER" ] && [ -f "$WALLPAPER" ]; then
+    matugen image "$WALLPAPER" -m dark --source-color-index 0 -t "$scheme" -q 2>/dev/null
+    "$HOME/dotfiles/install/themes/symphony" reload
+    "$HOME/.config/hypr/scripts/update-spektrum-colormap" &>/dev/null &
+    notify-send "Matugen Scheme" "Switched to $scheme"
+fi

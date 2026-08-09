@@ -67,7 +67,8 @@ if [ -n "$DISPLAYED_WALLPAPER" ]; then
 	ln -sf "$DISPLAYED_WALLPAPER" "$DYNAMIC_DIR/wallpaper"
 fi
 
-matugen image "$CURRENT_WALLPAPER" -m dark --source-color-index 0
+SCHEME_TYPE=$(grep '^SCHEME_TYPE=' ~/.config/symphony/matugen.conf 2>/dev/null | cut -d= -f2)
+matugen image "$CURRENT_WALLPAPER" -m dark --source-color-index 0 -t "${SCHEME_TYPE:-scheme-content}"
 
 # Push fitting colormap to vividspektrum if it's running
 scrDir/update-spektrum-colormap &

@@ -77,6 +77,7 @@ hl.bind("SUPER + ALT + SPACE", hl.dsp.exec_cmd(rofiDir .. "/wallPicker"), { desc
 hl.bind("CTRL + ALT + SPACE", hl.dsp.exec_cmd(scrDir .. "/change-theme"), { description = "select swww wall" })
 hl.bind("SUPER + CTRL + SHIFT + SPACE", hl.dsp.exec_cmd("symphony switch"), { description = "Theme Switcher" })
 hl.bind("SUPER + CTRL + SHIFT + BACKSPACE", hl.dsp.exec_cmd("symphony switch --random"), { description = "Theme Switcher" })
+hl.bind("SUPER + SHIFT + C", hl.dsp.exec_cmd(rofiDir .. "/schemePicker"), { description = "Color Scheme Picker" })
 hl.bind("SUPER + I", hl.dsp.exec_cmd('kitty --title symphony-tui -e symphony-tui'), { description = "Symphony TUI" })
 hl.bind("SUPER + ALT + I", hl.dsp.exec_cmd('kitty --title symphony-browse -e symphony browse'), { description = "Browse Themes" })
 

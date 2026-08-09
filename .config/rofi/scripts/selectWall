@@ -44,7 +44,8 @@ choice=$(menu | rofi -i -dmenu -p "" -config ~/.config/rofi/custom-rofi/config-w
 for wp in "${wallpapers[@]}"; do
 	if [[ "$(basename "$wp")" == "$choice" ]]; then
 		"$wallbin" img "$wp" $wallpaper_params
-		matugen image "$wp" -m dark --source-color-index 0
+		SCHEME_TYPE=$(grep '^SCHEME_TYPE=' ~/.config/symphony/matugen.conf 2>/dev/null | cut -d= -f2)
+		matugen image "$wp" -m dark --source-color-index 0 -t "${SCHEME_TYPE:-scheme-content}"
 
 		# Push fitting colormap to vividspektrum if it's running
 		~/.config/hypr/scripts/update-spektrum-colormap &
