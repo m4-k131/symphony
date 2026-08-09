@@ -39,53 +39,64 @@
 
 /* ── One-line layout ─────────────────────────────────────────── */
 /* URL bar on the left, tabs on the right. Both always visible.   */
+/* Based on one-line-firefox approach: nav-bar pulled up into    */
+/* the same row as TabsToolbar via negative margin.              */
+
+/* Hide menu bar and titlebar chrome */
+#toolbar-menubar {
+    display: none !important;
+}
 
 #navigator-toolbox {
-    position: relative !important;
-    z-index: 10000 !important;
     background: transparent !important;
     border: 0 !important;
-    display: flex !important;
-    flex-direction: row !important;
-    height: var(--tab-height) !important;
 }
 
-/* Nav bar: left side, always visible */
-#nav-bar {
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 40vw !important;
-    margin: 0 !important;
-    padding: 2px 4px !important;
-    background: transparent !important;
-    border: 0 !important;
-    border-radius: 0 8px 8px 0 !important;
-    overflow: hidden !important;
-    z-index: 9999 !important;
-    height: var(--tab-height) !important;
-}
-
-/* URL bar: always visible */
-#urlbar {
-    pointer-events: auto !important;
-}
-
-/* ── Tab bar ─────────────────────────────────────────────────── */
-/* Tabs on the right side, always visible                         */
-
+/* TabsToolbar: full width, tabs pushed right to make room for nav-bar */
 #TabsToolbar {
+    background: transparent !important;
+    height: var(--tab-height) !important;
+    padding-top: var(--tab-padding-top) !important;
+    margin: 0 !important;
+}
+
+#tabbrowser-tabs {
     background: transparent !important;
     height: var(--tab-height) !important;
     margin-left: 40vw !important;
     padding-top: var(--tab-padding-top) !important;
 }
 
-#tabbrowser-tabs {
+/* Nav bar: overlaid on left side of tab bar via negative margin */
+#nav-bar {
+    margin-top: calc(-1 * var(--tab-height)) !important;
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+    padding-inline: 0 !important;
     background: transparent !important;
+    border: 0 !important;
     height: var(--tab-height) !important;
-    padding-top: var(--tab-padding-top) !important;
-    margin-top: calc(-1 * var(--tab-padding-top)) !important;
+    width: 40vw !important;
+    max-width: 40vw !important;
+}
+
+/* Remove extra padding from nav-bar children */
+#nav-bar-customization-target {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* URL bar container: no extra spacing */
+#urlbar-container {
+    margin: 0 !important;
+    padding: 0 !important;
+    padding-inline: 0 !important;
+    --urlbar-container-height: var(--tab-height) !important;
+}
+
+/* URL bar: always visible */
+#urlbar {
+    pointer-events: auto !important;
 }
 
 /* Tab backgrounds — transparent to show toolbar background */
@@ -228,7 +239,8 @@
 }
 
 .titlebar-spacer {
-    width: 8px !important;
+    width: 0 !important;
+    display: none !important;
 }
 
 /* ── Sidebar ─────────────────────────────────────────────────── */
