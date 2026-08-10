@@ -123,16 +123,6 @@ _Colors generated from wallpaper using Matugen_
 
 ---
 
-## Hyprlock
-
-<div align="center">
-
-![Hyprlock](assets/hyprlock.png)
-
-</div>
-
----
-
 ## Neovim
 
 <div align="center">
@@ -292,7 +282,7 @@ See [.config/hypr/bindings.conf](.config/hypr/bindings.conf) for full list.
 | Launcher      | [Rofi](https://github.com/lbonn/rofi)                                       |
 | Terminal      | [Kitty](https://sw.kovidgoyal.net/kitty/) / [Ghostty](https://ghostty.org/) |
 | Notifications | [SwayNC](https://github.com/ErikReider/SwayNotificationCenter)              |
-| Lock screen   | [Hyprlock](https://github.com/hyprwm/hyprlock)                              |
+| Lock screen   | KDE Plasma (loginctl)                                                      |
 | Theme engine  | [Matugen](https://github.com/InioX/matugen)                                 |
 | Music         | [MPD](https://musicpd.org/) + [RMPC](https://github.com/mierak/rmpc)        |
 | Visualizer    | [Cava](https://github.com/karlstav/cava)                                    |

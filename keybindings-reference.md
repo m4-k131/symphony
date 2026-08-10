@@ -195,5 +195,5 @@
 - **LMB** = Left Mouse Button
 - **RMB** = Right Mouse Button
 - Lock screen uses `loginctl lock-session` (KDE Plasma lock screen)
-- hypridle/hyprlock are disabled — KDE Plasma handles idle/lock
+- hypridle is disabled — KDE Plasma handles idle/lock
 - Web apps launch via Firefox PWA (firefoxpwa) with Firefox fallback

@@ -24,7 +24,7 @@ hl.define_submap("fullscreen", function()
     hl.bind("SUPER + Q", hl.dsp.window.close(), { description = "Close window" })
 
     -- Lock screen (in case you need to leave)
-    hl.bind("SUPER + SHIFT + L", hl.dsp.exec_cmd(os.getenv("HOME") .. "/.config/hypr/scripts/lock-screen"), { description = "Lock screen" })
+    hl.bind("SUPER + SHIFT + L", hl.dsp.exec_cmd("loginctl lock-session"), { description = "Lock screen" })
 end)
 
 -- Enter/exit fullscreen submap based on window fullscreen state

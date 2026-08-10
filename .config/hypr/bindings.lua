@@ -82,7 +82,7 @@ hl.bind("SUPER + I", hl.dsp.exec_cmd('kitty --title symphony-tui -e symphony-tui
 hl.bind("SUPER + ALT + I", hl.dsp.exec_cmd('kitty --title symphony-browse -e symphony browse'), { description = "Browse Themes" })
 
 -- Power
-hl.bind("SUPER + SHIFT + L", hl.dsp.exec_cmd(scrDir .. "/lock-screen"), { description = "lock screen" })
+hl.bind("SUPER + SHIFT + L", hl.dsp.exec_cmd("loginctl lock-session"), { description = "lock screen" })
 hl.bind("SUPER + SHIFT + S", hl.dsp.exec_cmd(scrDir .. "/graceful-logout"), { description = "Switch session" })
 hl.bind("SUPER + CTRL + up", hl.dsp.exec_cmd(scrDir .. "/graceful-reboot"), { description = "reboot" })
 hl.bind("SUPER + BACKSPACE", hl.dsp.exec_cmd(scrDir .. "/toggle-terminal-transparency"), { description = "Terminal Transparency" })

@@ -36,7 +36,7 @@ for wp in "${wallpapers[@]}"; do
 
 	"$wallbin" img "$wp" $wallpaper_params
 
-	# update wallpaper symlink for hyprlock
+	# update wallpaper symlink
 	mkdir -p "$HOME/.config/symphony/current"
 	ln -sf "$wp" "$HOME/.config/symphony/current/wallpaper"
 

@@ -13,7 +13,7 @@ packages=(
 	base-devel git stow
 
 	# Hyprland
-	hyprland hypridle hyprlock hyprpicker hyprsunset
+	hyprland hypridle hyprpicker hyprsunset
 	xdg-desktop-portal-hyprland xdg-desktop-portal-gtk
 	qt5-wayland qt6-wayland uwsm
 

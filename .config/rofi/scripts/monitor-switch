@@ -10,20 +10,20 @@ MON1="desc:Beihai Century Joint Innovation Technology Co.Ltd UWQHD-144-V2"
 MON2="desc:Beihai Century Joint Innovation Technology Co.Ltd UWQHD-100-C"
 
 set_both() {
-	hyprctl monitor "$MON2,3440x1440@99.998,4629x552,1"
-	hyprctl monitor "$MON1,3440x1440@100,8069x552,1"
+	hyprctl eval "hl.monitor({output = \"$MON2\", mode = \"3440x1440@99.998\", position = \"4629x552\", scale = 1, disabled = false})"
+	hyprctl eval "hl.monitor({output = \"$MON1\", mode = \"3440x1440@100\", position = \"8069x552\", scale = 1, disabled = false})"
 	notify-send "Monitors" "Both monitors enabled"
 }
 
 set_only1() {
-	hyprctl monitor "$MON1,3440x1440@100,0x0,1"
-	hyprctl monitor "$MON2,disable"
+	hyprctl eval "hl.monitor({output = \"$MON1\", mode = \"3440x1440@100\", position = \"0x0\", scale = 1, disabled = false})"
+	hyprctl eval "hl.monitor({output = \"$MON2\", disabled = true})"
 	notify-send "Monitors" "Only DP-1 enabled"
 }
 
 set_only2() {
-	hyprctl monitor "$MON2,3440x1440@99.998,0x0,1"
-	hyprctl monitor "$MON1,disable"
+	hyprctl eval "hl.monitor({output = \"$MON2\", mode = \"3440x1440@99.998\", position = \"0x0\", scale = 1, disabled = false})"
+	hyprctl eval "hl.monitor({output = \"$MON1\", disabled = true})"
 	notify-send "Monitors" "Only DP-3 enabled"
 }
 

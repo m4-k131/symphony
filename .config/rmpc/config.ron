@@ -43,12 +43,12 @@
             ".":       VolumeUp,
             "<Tab>":   NextTab,
             "<S-Tab>": PreviousTab,
-            "1":       SwitchToTab("Playing"),
-            "2":       SwitchToTab("Artists"),
-            "3":       SwitchToTab("Albums"),
-            "4":       SwitchToTab("Find"),
-            "9":       SwitchToTab("Lists"),
-            "0":       SwitchToTab("Dir"),
+            "1":       SwitchToTab("Playing [1]"),
+            "2":       SwitchToTab("Artists [2]"),
+            "3":       SwitchToTab("Albums [3]"),
+            "4":       SwitchToTab("Find [4]"),
+            "9":       SwitchToTab("Lists [9]"),
+            "0":       SwitchToTab("Dir [0]"),
             "q":       Quit,
             ">":       NextTrack,
             "p":       TogglePause,
@@ -96,7 +96,7 @@
             "<Esc>":     Close,
             "K":         MoveUp,
             "D":         Delete,
-            "<Delete>":  DeleteFromPlaylist,
+            "<Delete>":  DeleteFromPlaylist(),
             "<C-s>":     Save(kind: Modal(all: true)),
         },
         queue: {
@@ -126,7 +126,7 @@
     ),
     tabs: [
         (
-            name: "Playing",
+            name: "Playing [1]",
             pane: Split(
                 direction: Horizontal,
                 panes: [
@@ -149,23 +149,23 @@
             ),
         ),
         (
-         name: "Artists",
+         name: "Artists [2]",
          pane: Pane(Artists),
         ),
         (
-         name: "Albums",
+         name: "Albums [3]",
          pane: Pane(Albums),
         ),
         (
-         name: "Find",
+         name: "Find [4]",
          pane: Pane(Search),
         ),
          (
-          name: "Lists",
+          name: "Lists [9]",
           pane: Pane(Playlists),
          ),
         (
-         name: "Dir",
+         name: "Dir [0]",
          pane: Pane(Directories),
         ),
     ],
