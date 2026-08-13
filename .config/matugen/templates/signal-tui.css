@@ -50,8 +50,9 @@ Screen {
     padding: 1 2;
 }
 
-#chat-view > Label {
-    margin: 0 0 1 0;
+#chat-view > Static {
+    margin: 0 0 0 0;
+    width: 1fr;
 }
 
 #chat-view > Image {
