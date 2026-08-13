@@ -23,16 +23,12 @@ get_rectangles() {
 # Select based on mode
 case "$MODE" in
 region)
-  wayfreeze &
-  PID=$!
-  sleep .1
+  command -v wayfreeze >/dev/null 2>&1 && { wayfreeze & PID=$!; sleep .1; }
   SELECTION=$(slurp 2>/dev/null)
   kill $PID 2>/dev/null
   ;;
 windows)
-  wayfreeze &
-  PID=$!
-  sleep .1
+  command -v wayfreeze >/dev/null 2>&1 && { wayfreeze & PID=$!; sleep .1; }
   SELECTION=$(get_rectangles | slurp -r 2>/dev/null)
   kill $PID 2>/dev/null
   ;;
@@ -41,9 +37,7 @@ fullscreen)
   ;;
 smart | *)
   RECTS=$(get_rectangles)
-  wayfreeze &
-  PID=$!
-  sleep .1
+  command -v wayfreeze >/dev/null 2>&1 && { wayfreeze & PID=$!; sleep .1; }
   SELECTION=$(echo "$RECTS" | slurp 2>/dev/null)
   kill $PID 2>/dev/null
 

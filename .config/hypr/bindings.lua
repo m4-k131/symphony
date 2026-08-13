@@ -56,6 +56,7 @@ hl.bind("SUPER + ALT + left",  hl.dsp.exec_cmd(scrDir .. "/cycle-wallpaper prev"
 -- ── Capture ───────────────────────────────────────────────────────
 hl.bind("SUPER + P", hl.dsp.exec_cmd(scrDir .. "/screenshot"), { description = "Screenshot with editing" })
 hl.bind("PRINT", hl.dsp.exec_cmd(scrDir .. "/screenshot"), { description = "Screenshot with editing" })
+hl.bind("SUPER + SHIFT + S", hl.dsp.exec_cmd(scrDir .. "/screenshot"), { description = "Screenshot with editing (Logitech key)" })
 hl.bind("SHIFT + PRINT", hl.dsp.exec_cmd(scrDir .. "/screenshot smart clipboard"), { description = "Screenshot to clipboard" })
 hl.bind("SUPER + SHIFT + P", hl.dsp.exec_cmd("pkill hyprpicker || hyprpicker -a"), { description = "Color picker" })
 hl.bind("SUPER + R", hl.dsp.exec_cmd(scrDir .. "/screenrecord --with-desktop-audio"), { description = "Record screen" })
@@ -96,4 +97,4 @@ hl.bind("SUPER + CTRL + BACKSPACE", hl.dsp.exec_cmd(scrDir .. "/toggle-focus"), 
 -- ── File Sharing (LocalSend) ─────────────────────────────────────
 hl.bind("SUPER + ALT + S", hl.dsp.exec_cmd('kitty --title share -e ' .. scrDir .. "/fileshare file"))
 hl.bind("SUPER + CTRL + S", hl.dsp.exec_cmd('kitty --title share -e ' .. scrDir .. "/fileshare folder"))
-hl.bind("SUPER + SHIFT + S", hl.dsp.exec_cmd('kitty --title share -e ' .. scrDir .. "/fileshare clipboard"))
+hl.bind("SUPER + CTRL + SHIFT + S", hl.dsp.exec_cmd('kitty --title share -e ' .. scrDir .. "/fileshare clipboard"))
