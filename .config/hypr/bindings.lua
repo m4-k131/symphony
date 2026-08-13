@@ -43,7 +43,6 @@ hl.bind("SUPER + SHIFT + N", hl.dsp.exec_cmd(rofiDir .. "/wifi.sh"), { descripti
 hl.bind("SUPER + CTRL + T", hl.dsp.exec_cmd("symphony switch"), { description = "Theme switcher" })
 hl.bind("SUPER + CTRL + SHIFT + T", hl.dsp.exec_cmd("symphony switch --random"), { description = "Random theme" })
 hl.bind("SUPER + CTRL + W", hl.dsp.exec_cmd(rofiDir .. "/wallPicker"), { description = "Wallpaper picker" })
-hl.bind("SUPER + CTRL + SHIFT + W", hl.dsp.exec_cmd(rofiDir .. "/selectWall"), { description = "Matugen themes apply" })
 hl.bind("SUPER + CTRL + C", hl.dsp.exec_cmd(rofiDir .. "/schemePicker"), { description = "Color scheme picker" })
 hl.bind("SUPER + CTRL + R", hl.dsp.exec_cmd(scrDir .. "/change-theme"), { description = "Regenerate theme" })
 hl.bind("SUPER + SHIFT + I", hl.dsp.exec_cmd('kitty --title symphony-browse -e symphony browse'), { description = "Browse themes" })

@@ -22,7 +22,8 @@ fi
 
 menu() {
 	for wp in "${wallpapers[@]}"; do
-		printf "%s\x00icon\x1f%s\n" "$(basename "$wp")" "$wp"
+		rel="${wp#"$wallpaper_dir/"}"
+		printf "%s\x00icon\x1f%s\n" "$rel" "$wp"
 	done | sort
 }
 
@@ -32,7 +33,8 @@ choice=$(menu | rofi -i -dmenu -p "" -config ~/.config/rofi/custom-rofi/config-w
 [[ -z "$choice" ]] && exit 0
 
 for wp in "${wallpapers[@]}"; do
-	[[ "$(basename "$wp")" == "$choice" ]] || continue
+	rel="${wp#"$wallpaper_dir/"}"
+	[[ "$rel" == "$choice" ]] || continue
 
 	"$wallbin" img "$wp" $wallpaper_params
 
