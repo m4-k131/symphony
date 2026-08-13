@@ -16,11 +16,11 @@ hl.bind("SUPER + E", hl.dsp.exec_cmd("uwsm app -- dolphin --new-window"), { desc
 hl.bind("ALT + slash", hl.dsp.exec_cmd(terminal .. " -e btop"), { description = "Activity" })
 hl.bind("SUPER + D", hl.dsp.exec_cmd("pkill rofi || rofi -show drun"), { description = "App Launcher" })
 hl.bind("SUPER + O", hl.dsp.exec_cmd("~/apps/Devin/devin-desktop"), { description = "Devin" })
-hl.bind("ALT + M", hl.dsp.exec_cmd(terminal .. " -e rmpc"), { description = "Music" })
+hl.bind("SUPER + M", hl.dsp.exec_cmd(terminal .. " -e rmpc"), { description = "Music" })
 hl.bind("ALT + Q", hl.dsp.exec_cmd(terminal .. " -e yazi"), { description = "yazi" })
 hl.bind("ALT + N", hl.dsp.exec_cmd(terminal .. " -e nvim"), { description = "Neovim" })
 hl.bind("SUPER + S", hl.dsp.exec_cmd(terminal .. " --class=Wiremix -e wiremix"), { description = "Wiremix" })
-hl.bind("SUPER + ALT + M", hl.dsp.exec_cmd("easyeffects"), { description = "easyeffects" })
+hl.bind("ALT + M", hl.dsp.exec_cmd("easyeffects"), { description = "easyeffects" })
 
 -- WebApps
 hl.bind("SUPER + A", hl.dsp.exec_cmd(webapp .. ' "https://perplexity.ai"'), { description = "Perplexity" })
@@ -96,6 +96,7 @@ hl.bind("SUPER + K", hl.dsp.exec_cmd(rofiDir .. "/keyhints"), { description = "S
 
 -- Screenshots
 hl.bind("SUPER + P", hl.dsp.exec_cmd(scrDir .. "/screenshot"), { description = "Screenshot with editing" })
+hl.bind("PRINT", hl.dsp.exec_cmd(scrDir .. "/screenshot"), { description = "Screenshot with editing" })
 hl.bind("SHIFT + PRINT", hl.dsp.exec_cmd(scrDir .. "/screenshot smart clipboard"), { description = "Screenshot to clipboard" })
 
 -- Screen recordings

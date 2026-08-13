@@ -20,6 +20,7 @@
     "network#wifi",
     "network#eth",
     "bluetooth",
+    "custom/fn-lock",
     "custom/solaar",
     "custom/signal",
     "custom/brightness",
@@ -205,6 +206,14 @@
     "format-connected": "",
     "tooltip-format": "Devices connected: {num_connections}",
     "on-click": "systemsettings kcm_bluetooth"
+  },
+  "custom/fn-lock": {
+    "format": "{}",
+    "exec": "solaar config 3 fn-swap 2>/dev/null | grep -q True && echo '󰘲' || echo '󰘹'",
+    "exec-if": "solaar config 3 fn-swap 2>/dev/null | grep -qE 'True|False'",
+    "interval": 5,
+    "on-click": "solaar config 3 fn-swap Toggle",
+    "tooltip-format": "Fn Lock: click to toggle"
   },
   "custom/solaar": {
     "format": "󰒄",

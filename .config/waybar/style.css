@@ -83,6 +83,7 @@ window#waybar {
 #clock,
 #custom-idle-indicator,
 #custom-solaar,
+#custom-fn-lock,
 #custom-signal,
 #custom-brightness {
   padding: 0 10px;
