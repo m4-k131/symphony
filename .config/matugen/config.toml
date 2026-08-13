@@ -88,5 +88,9 @@ output_path = '~/.config/symphony/dynamic/.config/spicetify/Themes/symphony/colo
 input_path = '~/.config/matugen/templates/firefox-userChrome.css'
 output_path = '~/.config/mozilla/firefox/6vrxgylm.default-release/chrome/userChrome.css'
 
+[templates.signal-tui]
+input_path = '~/.config/matugen/templates/signal-tui.css'
+output_path = '~/.config/signal-tui/colors.css'
+
 
 

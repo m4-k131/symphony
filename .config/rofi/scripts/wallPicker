@@ -40,6 +40,16 @@ for wp in "${wallpapers[@]}"; do
 	mkdir -p "$HOME/.config/symphony/current"
 	ln -sf "$wp" "$HOME/.config/symphony/current/wallpaper"
 
+	# Regenerate dynamic theme colors if in dynamic mode
+	SYMPHONY_DIR="$HOME/.config/symphony"
+	CURRENT_THEME=$(cat "$SYMPHONY_DIR/.current-theme" 2>/dev/null || echo "dynamic")
+	if [[ "$CURRENT_THEME" == "dynamic" ]]; then
+		SCHEME_TYPE=$(grep '^SCHEME_TYPE=' "$SYMPHONY_DIR/matugen.conf" 2>/dev/null | cut -d= -f2)
+		matugen image "$wp" -m dark --source-color-index 0 -t "${SCHEME_TYPE:-scheme-content}"
+		~/.config/hypr/scripts/update-spektrum-colormap &
+		"$HOME/dotfiles/install/themes/symphony" reload
+	fi
+
 	notify-send -i "$wp" "Wallpaper" "${wp##*/}"
 	break
 done

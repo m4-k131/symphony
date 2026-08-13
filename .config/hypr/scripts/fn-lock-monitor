@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+# Monitor Logitech MX Keys Fn lock state for waybar
+# Reads live HID++ state via solaar's Python library
+# Usage: fn-lock-monitor
+
+import sys, time, struct
+sys.path.insert(0, '/usr/lib/python3.14/site-packages')
+from logitech_receiver import base
+
+HIDRAW = '/dev/hidraw3'
+DEV = 3
+HOSTS_INFO_REQ = 0x0B00  # feature 11, function 0
+FN_INV_REQ = 0x0D00      # feature 13, function 0
+
+last = None
+while True:
+    try:
+        handle = base.open_path(HIDRAW)
+        host_info = base.request(handle, DEV, HOSTS_INFO_REQ, long_message=True, protocol=2.0)
+        if host_info:
+            _, _, _, current_host = struct.unpack('!BBBB', host_info[:4])
+            fn_result = base.request(handle, DEV, FN_INV_REQ, current_host, long_message=True, protocol=2.0)
+            if fn_result:
+                state = fn_result[1]
+                icon = '󰘲' if state else '󰘹'
+                if icon != last:
+                    print(icon, flush=True)
+                    last = icon
+        base.close(handle)
+    except Exception:
+        pass
+    time.sleep(1)
