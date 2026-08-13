@@ -18,13 +18,26 @@ set_both() {
 set_only1() {
 	hyprctl eval "hl.monitor({output = \"$MON1\", mode = \"3440x1440@100\", position = \"0x0\", scale = 1, disabled = false})"
 	hyprctl eval "hl.monitor({output = \"$MON2\", disabled = true})"
+	migrate_workspaces
 	notify-send "Monitors" "Only DP-1 enabled"
 }
 
 set_only2() {
 	hyprctl eval "hl.monitor({output = \"$MON2\", mode = \"3440x1440@99.998\", position = \"0x0\", scale = 1, disabled = false})"
 	hyprctl eval "hl.monitor({output = \"$MON1\", disabled = true})"
+	migrate_workspaces
 	notify-send "Monitors" "Only DP-3 enabled"
+}
+
+# Move workspaces from disabled monitors to the first active monitor
+migrate_workspaces() {
+	sleep 0.5
+	local active_mon
+	active_mon=$(hyprctl monitors -j | jq -r '.[] | select(.disabled == false) | .name' | head -1)
+	[[ -z "$active_mon" ]] && return
+	hyprctl -j workspaces | jq -r '.[] | .id' | while read -r ws; do
+		hyprctl dispatch moveworkspacetomonitor "$ws $active_mon" 2>/dev/null
+	done
 }
 
 # Direct mode (no rofi)
