@@ -33,6 +33,7 @@ get_preview() {
 }
 
 menu() {
+	# Static themes from dotfiles/themes/
 	for dir in "$themes_dir"/*/; do
 		name=$(basename "$dir")
 		[[ "$name" == "Wallpapers" || "$name" == ".git" ]] && continue
@@ -44,6 +45,24 @@ menu() {
 
 		printf "%s\x00icon\x1f%s\n" "$name" "$(get_thumb "$preview")"
 	done | sort
+
+	# Subfolder themes from ~/Pictures/Wallpaper/*/
+	local wall_dir="$HOME/Pictures/Wallpaper"
+	if [[ -d "$wall_dir" ]]; then
+		for dir in "$wall_dir"/*/; do
+			name=$(basename "$dir")
+			[[ "$name" == "dynamic" ]] && continue
+			[[ -d "$themes_dir/$name" ]] && continue  # skip if clashes with static theme
+			# Check for image files
+			find "$dir" -maxdepth 1 -type f \( -iname '*.jpg' -o -iname '*.png' -o -iname '*.webp' -o -iname '*.jpeg' \) -print -quit 2>/dev/null | grep -q . || continue
+
+			# Use first wallpaper as preview
+			local wall=$(find "$dir" -maxdepth 1 -type f \( -iname "*.jpg" -o -iname "*.png" -o -iname "*.webp" -o -iname "*.jpeg" \) 2>/dev/null | sort -V | head -1)
+			[[ -z "$wall" ]] && continue
+
+			printf "%s\x00icon\x1f%s\n" "$name" "$(get_thumb "$wall")"
+		done | sort
+	fi
 }
 
 choice=$(menu | rofi -i -dmenu -p "" \

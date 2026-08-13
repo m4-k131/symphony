@@ -17,10 +17,20 @@ fi
 source "$HOME/.config/rofi/scripts/thumbcache"
 
 THEME=$(cat "$HOME/.config/symphony/.current-theme" 2>/dev/null || echo "dynamic")
-WALLDIR="$HOME/dotfiles/themes/$THEME/backgrounds"
 WALLPAPER_PARAMS="--transition-fps 120 --transition-duration 1 --transition-bezier 0.25,0.1,0.25,1.0"
 
-if [[ "$THEME" == "dynamic" || ! -d "$WALLDIR" ]]; then
+# Resolve wallpaper directory based on theme type
+if [[ "$THEME" == "dynamic" ]]; then
+  notify-send "Wallpaper Cycling" "Not available for '$THEME' theme.\nUse SUPER+CTRL+SPACE for dynamic wallpaper picker."
+  exit 0
+elif [[ -d "$HOME/Pictures/Wallpaper/$THEME" && ! -d "$HOME/dotfiles/themes/$THEME" ]]; then
+  # Subfolder theme
+  WALLDIR="$HOME/Pictures/Wallpaper/$THEME"
+else
+  WALLDIR="$HOME/dotfiles/themes/$THEME/backgrounds"
+fi
+
+if [[ ! -d "$WALLDIR" ]]; then
   notify-send "Wallpaper Cycling" "Not available for '$THEME' theme.\nUse SUPER+CTRL+SPACE for dynamic wallpaper picker."
   exit 0
 fi
@@ -45,7 +55,14 @@ apply_wallpaper() {
   local idx=$1 trans=$2 pos=$3
   local wall="${WALLS[$idx]}"
   "$wallbin" img "$wall" --transition-type "$trans" --transition-pos "$pos" $WALLPAPER_PARAMS
-  ln -sf "$wall" "$HOME/dotfiles/themes/$THEME/wallpaper"
+  # Update wallpaper symlink in the correct target dir
+  local target
+  if [[ -d "$HOME/Pictures/Wallpaper/$THEME" && ! -d "$HOME/dotfiles/themes/$THEME" ]]; then
+    target="$HOME/.config/symphony/subfolders/$THEME"
+  else
+    target="$HOME/dotfiles/themes/$THEME"
+  fi
+  ln -sf "$wall" "$target/wallpaper"
   notify-send -i "$wall" "Wallpaper" "$((idx + 1))/$TOTAL"
 }
 

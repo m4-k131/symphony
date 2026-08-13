@@ -66,6 +66,8 @@ Wallpapers: [vyrx-dev/wallpapers](https://github.com/vyrx-dev/wallpapers)
 symphony switch          # pick a theme
 symphony switch zen      # switch directly
 symphony switch --random # switch to a random theme
+symphony switch nature   # switch to subfolder theme 'nature'
+symphony lock nature     # lock colors for 'nature' from its wallpaper
 symphony list            # see all themes
 symphony reload          # re-apply current
 symphony fix             # fix broken symlinks
@@ -85,6 +87,16 @@ symphony fix             # fix broken symlinks
 ## How it works
 
 Symphony updates `~/.config/symphony/current` and runs hooks to reload apps. No files are overwritten.
+
+### Subfolder themes
+
+If you organize wallpapers into thematic subfolders under `~/Pictures/Wallpaper/` (e.g. `nature/`, `space/`, `abstract/`), each subfolder automatically appears as a theme in the switcher. Switching to a subfolder theme generates colors from the first wallpaper via matugen and locks them — changing wallpapers within the subfolder keeps the same color scheme.
+
+To regenerate locked colors (e.g. after adding new wallpapers):
+
+```bash
+symphony lock nature     # regenerate colors from first wallpaper in nature/
+```
 
 ## Hooks (what it covers)
 

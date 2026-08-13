@@ -18,6 +18,8 @@ HOOKS_DIR="$SCRIPT_DIR/hooks"
 SYMPHONY_DIR="$HOME/.config/symphony"
 CURRENT_LINK="$SYMPHONY_DIR/current"
 THEME_FILE="$SYMPHONY_DIR/.current-theme"
+WALLPAPER_DIR="$HOME/Pictures/Wallpaper"
+SUBFOLDER_DIR="$SYMPHONY_DIR/subfolders"
 
 VERSION="3.0.0"
 
@@ -41,13 +43,23 @@ current_theme() {
 }
 
 theme_exists() {
-	[[ -d "$THEMES_DIR/$1" ]]
+	[[ -d "$THEMES_DIR/$1" ]] || is_subfolder_theme "$1"
+}
+
+is_subfolder_theme() {
+	[[ -d "$WALLPAPER_DIR/$1" ]] && [[ ! -d "$THEMES_DIR/$1" ]]
+}
+
+subfolder_has_images() {
+	find "$WALLPAPER_DIR/$1" -maxdepth 1 -type f \( -iname '*.jpg' -o -iname '*.png' -o -iname '*.webp' -o -iname '*.jpeg' \) -print -quit 2>/dev/null | grep -q .
 }
 
 # Dynamic theme uses a runtime dir outside the git repo for generated files
 target_dir() {
 	if [[ "$1" == "dynamic" ]]; then
 		echo "$SYMPHONY_DIR/dynamic"
+	elif is_subfolder_theme "$1"; then
+		echo "$SUBFOLDER_DIR/$1"
 	else
 		echo "$THEMES_DIR/$1"
 	fi
@@ -59,6 +71,15 @@ list_themes() {
 		name=$(basename "$dir")
 		[[ "$name" != "dynamic" && "$name" != "Wallpapers" ]] && echo "$name"
 	done | sort
+	# List subfolder themes from ~/Pictures/Wallpaper/*/ (skip names that clash with static themes)
+	if [[ -d "$WALLPAPER_DIR" ]]; then
+		for dir in "$WALLPAPER_DIR"/*/; do
+			name=$(basename "$dir")
+			[[ "$name" == "dynamic" ]] && continue
+			[[ -d "$THEMES_DIR/$name" ]] && continue
+			subfolder_has_images "$name" && echo "$name"
+		done | sort
+	fi
 }
 
 run_hooks() {
@@ -94,9 +115,16 @@ set_wallpaper() {
 		"$HOME/.config/hypr/scripts/change-theme"
 		return
 	fi
-	
+
+	local wall_dir
+	if is_subfolder_theme "$theme"; then
+		wall_dir="$WALLPAPER_DIR/$theme"
+	else
+		wall_dir="$THEMES_DIR/$theme/backgrounds"
+	fi
+
 	local wall
-	wall=$(find "$THEMES_DIR/$theme/backgrounds" -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.webp" \) 2>/dev/null | sort -V | head -1)
+	wall=$(find "$wall_dir" -maxdepth 1 -type f \( -iname "*.jpg" -o -iname "*.png" -o -iname "*.webp" -o -iname "*.jpeg" \) 2>/dev/null | sort -V | head -1)
 	[[ -z "$wall" ]] && return
 
 	"$wallbin" query &>/dev/null || {
@@ -104,7 +132,9 @@ set_wallpaper() {
 		sleep 0.3
 	}
 	"$wallbin" img "$wall" --transition-type center --transition-fps 120 --transition-duration 0.8
-	ln -sfn "backgrounds/$(basename "$wall")" "$THEMES_DIR/$theme/wallpaper"
+
+	local target=$(target_dir "$theme")
+	ln -sfn "$wall" "$target/wallpaper"
 }
 
 # ╭───────────────────────────────────────────────────────────────────────╮
@@ -161,8 +191,14 @@ cmd_switch() {
 	ln -sfn "$(target_dir "$theme")" "$CURRENT_LINK"
 
 	# Dynamic theme runs hooks via change-theme -> symphony reload
+	# Subfolder themes need hooks only if they have a .config dir (i.e. colors locked)
 	if [[ "$theme" != "dynamic" ]]; then
-		run_hooks
+		if is_subfolder_theme "$theme" && [[ ! -d "$(target_dir "$theme")/.config" ]]; then
+			# No locked colors yet — generate from first wallpaper
+			"$HOME/.config/hypr/scripts/change-theme" "$theme"
+		else
+			run_hooks
+		fi
 	fi
 
 	hyprctl keyword misc:disable_autoreload 0 &>/dev/null || true
@@ -170,7 +206,7 @@ cmd_switch() {
 
 	# Dynamic theme handles its own notification via change-theme script
 	if [[ "$theme" != "dynamic" ]]; then
-		notify "$theme" "" "$(readlink -f "$THEMES_DIR/$theme/wallpaper" 2>/dev/null)"
+		notify "$theme" "" "$(readlink -f "$(target_dir "$theme")/wallpaper" 2>/dev/null)"
 		# Push fitting colormap to vividspektrum if it's running
 		"$HOME/.config/hypr/scripts/update-spektrum-colormap" &>/dev/null &
 	fi
@@ -223,8 +259,38 @@ cmd_remove() {
 		cmd_switch "$next"
 	fi
 
-	rm -rf "${THEMES_DIR:?}/$theme"
+	if is_subfolder_theme "$theme"; then
+		rm -rf "${SUBFOLDER_DIR:?}/$theme"
+	else
+		rm -rf "${THEMES_DIR:?}/$theme"
+	fi
 	ok "Removed $theme"
+}
+
+cmd_lock() {
+	local theme="$1"
+	[[ -z "$theme" ]] && theme=$(current_theme)
+
+	if [[ "$theme" == "dynamic" ]]; then
+		err "Can't lock dynamic theme — switch to a subfolder theme first"
+		exit 1
+	fi
+	is_subfolder_theme "$theme" || {
+		err "$theme is not a subfolder theme"
+		exit 1
+	}
+
+	local target
+	target=$(target_dir "$theme")
+	if [[ -d "$target/.config" ]]; then
+		info "Colors already locked for $theme"
+		read -r -p "Regenerate from current wallpaper? [y/N] " confirm
+		[[ "$confirm" != "y" ]] && exit 0
+	fi
+
+	info "Locking colors for $theme..."
+	"$HOME/.config/hypr/scripts/change-theme" "$theme"
+	ok "Locked colors for $theme"
 }
 
 cmd_fix() {
@@ -271,6 +337,7 @@ Commands:
   current            Print current theme
   reload             Re-apply current theme
   fix                Fix broken symlinks
+  lock [theme]       Lock colors for a subfolder theme (generate from wallpaper)
   remove <theme>     Delete a theme
   uninstall          Remove Symphony
   help               This help
@@ -293,6 +360,8 @@ Examples:
   symphony switch
   symphony switch tokyo-night
   symphony switch --random
+  symphony switch nature        # switch to subfolder theme 'nature'
+  symphony lock nature          # lock colors for 'nature' from its wallpaper
   symphony import bjarneo/omarchy-sakura-theme
   symphony import https://github.com/user/omarchy-theme
 
@@ -336,6 +405,7 @@ case "${1:-help}" in
 	tui)             exec "$SCRIPT_DIR/symphony-tui" ;;
 	reload)          cmd_reload ;;
 	fix)             cmd_fix ;;
+	lock)            shift; cmd_lock "$@" ;;
 	list|ls)         cmd_list ;;
 	current)         echo ""; echo -e "  ${GREEN}●${RESET} $(current_theme)"; "$DOTFILES/scripts/fetch-colors" 2>/dev/null || true ;;
 	remove|rm)       shift; cmd_remove "$@" ;;
