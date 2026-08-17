@@ -10,34 +10,60 @@ MON1="desc:Beihai Century Joint Innovation Technology Co.Ltd UWQHD-144-V2"
 MON2="desc:Beihai Century Joint Innovation Technology Co.Ltd UWQHD-100-C"
 
 set_both() {
+	# Capture current active monitor (all workspaces are on it when going from 1→2 monitors)
+	local current_mon
+	current_mon=$(hyprctl monitors -j | jq -r '.[] | select(.disabled == false) | .name' | head -1)
+
 	hyprctl eval "hl.monitor({output = \"$MON2\", mode = \"3440x1440@99.998\", position = \"4629x552\", scale = 1, disabled = false})"
 	hyprctl eval "hl.monitor({output = \"$MON1\", mode = \"3440x1440@100\", position = \"8069x552\", scale = 1, disabled = false})"
+	sleep 0.3
+
+	# Move all existing workspaces back to the monitor they were on before
+	hyprctl -j workspaces | jq -r '.[] | .id' | while read -r ws; do
+		hyprctl dispatch moveworkspacetomonitor "$ws $current_mon" 2>/dev/null
+	done
+
+	# Put a fresh empty workspace on the newly enabled monitor
+	local other_mon
+	other_mon=$(hyprctl monitors -j | jq -r ".[] | select(.disabled == false and .name != \"$current_mon\") | .name" | head -1)
+	if [[ -n "$other_mon" ]]; then
+		local max_ws
+		max_ws=$(hyprctl -j workspaces | jq '[.[].id] | max // 0')
+		hyprctl dispatch moveworkspacetomonitor "$((max_ws + 1)) $other_mon" 2>/dev/null
+	fi
+
 	notify-send "Monitors" "Both monitors enabled"
 }
 
 set_only1() {
+	local target="$(hyprctl monitors -j | jq -r '.[] | select(.name | test("DP-1|HDMI-1"; "i")) | .name' | head -1)"
+	[[ -z "$target" ]] && target="$(hyprctl monitors -j | jq -r '.[] | select(.disabled == false) | .name' | head -1)"
+	local all_ws
+	all_ws=$(hyprctl -j workspaces | jq -r '.[] | .id' | sort -n)
 	hyprctl eval "hl.monitor({output = \"$MON1\", mode = \"3440x1440@100\", position = \"0x0\", scale = 1, disabled = false})"
 	hyprctl eval "hl.monitor({output = \"$MON2\", disabled = true})"
-	migrate_workspaces
+	sleep 0.3
+	target="$(hyprctl monitors -j | jq -r '.[] | select(.disabled == false) | .name' | head -1)"
+	[[ -z "$target" ]] && return
+	echo "$all_ws" | while read -r ws; do
+		hyprctl dispatch moveworkspacetomonitor "$ws $target" 2>/dev/null
+	done
 	notify-send "Monitors" "Only DP-1 enabled"
 }
 
 set_only2() {
+	local all_ws
+	all_ws=$(hyprctl -j workspaces | jq -r '.[] | .id' | sort -n)
 	hyprctl eval "hl.monitor({output = \"$MON2\", mode = \"3440x1440@99.998\", position = \"0x0\", scale = 1, disabled = false})"
 	hyprctl eval "hl.monitor({output = \"$MON1\", disabled = true})"
-	migrate_workspaces
-	notify-send "Monitors" "Only DP-3 enabled"
-}
-
-# Move workspaces from disabled monitors to the first active monitor
-migrate_workspaces() {
-	sleep 0.5
-	local active_mon
-	active_mon=$(hyprctl monitors -j | jq -r '.[] | select(.disabled == false) | .name' | head -1)
-	[[ -z "$active_mon" ]] && return
-	hyprctl -j workspaces | jq -r '.[] | .id' | while read -r ws; do
-		hyprctl dispatch moveworkspacetomonitor "$ws $active_mon" 2>/dev/null
+	sleep 0.3
+	local target
+	target="$(hyprctl monitors -j | jq -r '.[] | select(.disabled == false) | .name' | head -1)"
+	[[ -z "$target" ]] && return
+	echo "$all_ws" | while read -r ws; do
+		hyprctl dispatch moveworkspacetomonitor "$ws $target" 2>/dev/null
 	done
+	notify-send "Monitors" "Only DP-3 enabled"
 }
 
 # Direct mode (no rofi)
